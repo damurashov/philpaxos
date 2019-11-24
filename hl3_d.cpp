@@ -12,16 +12,34 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+    int sock;
     int res;
-    /* TODO: setsockopt */
+    const int buf_size = 20;
+    char buf[buf_size];
+    /* TODO: setsockopt, allow to reuse a previous IP */
 
     sockaddr_in addr;
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY; /* Local machine's IP */
-    addr.sin_port = htons(60003);
-    res = bind(sock, (sockaddr*)&addr, sizeof(addr));
-    cout << res << endl;
+    addr.sin_family = AF_INET;          /* IPv4 */
+    addr.sin_addr.s_addr = INADDR_ANY;  /* Localhost */
+
+    res = fork();
+    sock = socket(AF_INET, SOCK_DGRAM, 0);
+    if (res == 0) {
+        addr.sin_port = htons(60003);
+        res = bind(sock, (sockaddr*)&addr, sizeof(addr));
+        this_thread::sleep_for(100ms);
+
+        recv(sock, buf, buf_size, 0);
+        cout << buf << endl;
+    } else {
+        addr.sin_port = htons(60004);
+        res = bind(sock, (sockaddr*) &addr, sizeof(addr));
+        this_thread::sleep_for(100ms);
+
+        sprintf(buf, "Hello");
+        addr.sin_port = htons(60003);
+        sendto(sock, buf, buf_size, 0, (sockaddr*) &addr, sizeof(addr));
+    }
 
     return 0;
 }
