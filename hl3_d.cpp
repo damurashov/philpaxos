@@ -25,11 +25,17 @@ int main(int argc, char **argv) {
     res = fork();
     sock = socket(AF_INET, SOCK_DGRAM, 0);
     if (res == 0) {
+        timeval t;
+        t.tv_sec = 1;
+        t.tv_usec = 0;
         addr.sin_port = htons(60003);
+        int r = setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &t, sizeof(t));
+        cout << r << endl;
         res = bind(sock, (sockaddr*)&addr, sizeof(addr));
         this_thread::sleep_for(100ms);
 
-        recv(sock, buf, buf_size, 0);
+        r = recv(sock, buf, buf_size, 0);
+        cout << r << endl;
         cout << buf << endl;
     } else {
         addr.sin_port = htons(60004);
@@ -38,6 +44,8 @@ int main(int argc, char **argv) {
 
         sprintf(buf, "Hello");
         addr.sin_port = htons(60003);
+//        addr.sin_port = htons(60005);
+        this_thread::sleep_for(5s);
         sendto(sock, buf, buf_size, 0, (sockaddr*) &addr, sizeof(addr));
     }
 
