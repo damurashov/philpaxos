@@ -61,13 +61,21 @@ int main(int argc, char **argv) {
     int sock = socket(AF_INET, SOCK_DGRAM, 0);
     int res;
     char buf[50];
+
+    int reuse = 1;
+    setsockopt(sock
+            , SOL_SOCKET
+            , SO_REUSEADDR
+            , &reuse
+            , sizeof(int));
+
     sockaddr_in addr;
     addr.sin_family = AF_INET;          /* IPv4 */
     addr.sin_addr.s_addr = INADDR_ANY;  /* Localhost */
-    addr.sin_port = 60001;
+    addr.sin_port = 60003;
     res = bind(sock, (sockaddr*)&addr, sizeof(addr));
     cout << res << endl;
-    test_server_t serv(60002);
+    test_server_t serv(60004);
     serv.run();
     serv.send(sock, "Batya!");
     res = recv(sock, buf, 50, 0);

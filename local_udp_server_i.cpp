@@ -12,6 +12,13 @@ local_udp_server_i::local_udp_server_i(uint16_t port)
             , m_socket_des{socket(AF_INET, SOCK_DGRAM, 0)}
             , m_pid(-1) {
 
+    int reuse = 1;
+    setsockopt(m_socket_des
+            , SOL_SOCKET
+            , SO_REUSEADDR
+            , &reuse
+            , sizeof(int)); /* Reuse this IP again */
+
     sockaddr_in& address(get_address());
     bind(m_socket_des, (sockaddr*)&address, sizeof(address)); /* TODO: Check whether it is allowed to fork() after bind() */
 }
