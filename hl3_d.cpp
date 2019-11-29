@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <iomanip>
 
+#include "test_server_t.h"
+
 using namespace std;
 
 int serv() {
@@ -55,6 +57,21 @@ int serv() {
 
 
 int main(int argc, char **argv) {
-    serv();
+//    serv();
+    int sock = socket(AF_INET, SOCK_DGRAM, 0);
+    int res;
+    char buf[50];
+    sockaddr_in addr;
+    addr.sin_family = AF_INET;          /* IPv4 */
+    addr.sin_addr.s_addr = INADDR_ANY;  /* Localhost */
+    addr.sin_port = 60001;
+    res = bind(sock, (sockaddr*)&addr, sizeof(addr));
+    cout << res << endl;
+    test_server_t serv(60002);
+    serv.run();
+    serv.send(sock, "Batya!");
+    res = recv(sock, buf, 50, 0);
+    cout << res << endl;
+    cout << buf << endl;
     return 0;
 }

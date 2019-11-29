@@ -13,7 +13,7 @@ local_udp_server_i::local_udp_server_i(uint16_t port)
             , m_pid(-1) {
 
     sockaddr_in& address(get_address());
-    bind(m_socket_des, (sockaddr*)m_address, sizeof(m_address)); /* TODO: Check whether it is allowed to fork() after bind() */
+    bind(m_socket_des, (sockaddr*)&address, sizeof(address)); /* TODO: Check whether it is allowed to fork() after bind() */
 }
 
 /* --------------------------------------------------------------------------- *
@@ -58,11 +58,16 @@ pair<string_view, local_udp_address_t> local_udp_server_i::receive() {
     static char buf[message_buffer_length];
     sockaddr_in address;
 //    recv(m_socket_des, buf, message_buffer_length, 0);
+    auto addrlen(sizeof(address));
     recvfrom(m_socket_des
             , buf
             , message_buffer_length
             , 0
             , (sockaddr*) &address
-            , sizeof(address));
+            , (socklen_t*)&addrlen);
     return {string_view(buf, message_buffer_length), local_udp_address_t(address)};
+}
+
+int local_udp_server_i::get_socket() {
+    return m_socket_des;
 }

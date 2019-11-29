@@ -12,15 +12,13 @@ local_udp_address_t::local_udp_address_t(const sockaddr_in& address)
         : m_address(address) {}
 
 bool local_udp_address_t::send(int sockfd, string_view msg) {
-    if (sendto(sockfd
-                , msg.data()
-                , min<int>(msg.length(), message_buffer_length)
-                , 0
-                , (sockaddr*)m_address
-                , sizeof(m_address))) {
-            return true;
-        }
-        return false;
+    return sendto(sockfd
+            , msg.data()
+            , min<int>(msg.length(), message_buffer_length)
+            , 0
+            , (sockaddr*)&m_address
+            , sizeof(m_address));
+
 }
 
 sockaddr_in& local_udp_address_t::get_address() {

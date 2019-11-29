@@ -18,9 +18,10 @@ private:
 protected:
     virtual void          perform             () = 0;
 
+    int                   get_socket          ();
     std::pair
     <std::string_view
-    ,local_udp_address_t> receive();
+    ,local_udp_address_t> receive             ();
 
 public:
     void                  wait                ();
