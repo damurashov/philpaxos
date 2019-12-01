@@ -1,6 +1,12 @@
 [
 {
   "directory": "/home/sleeplynerd/Documents/M2-Highload-3/build/default",
+  "command": "/usr/bin/c++    -O3 -DNDEBUG   -std=gnu++1z -o CMakeFiles/hl3.dir/address_pool_t.cpp.o -c /home/sleeplynerd/Documents/M2-Highload-3/address_pool_t.cpp",
+  "file": "/home/sleeplynerd/Documents/M2-Highload-3/address_pool_t.cpp"
+},
+
+{
+  "directory": "/home/sleeplynerd/Documents/M2-Highload-3/build/default",
   "command": "/usr/bin/c++    -O3 -DNDEBUG   -std=gnu++1z -o CMakeFiles/hl3.dir/hl3_d.cpp.o -c /home/sleeplynerd/Documents/M2-Highload-3/hl3_d.cpp",
   "file": "/home/sleeplynerd/Documents/M2-Highload-3/hl3_d.cpp"
 },
