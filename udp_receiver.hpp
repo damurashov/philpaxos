@@ -3,6 +3,7 @@
 
 #include "receiver_t.hpp"
 #include "parameters.h"
+#include "ip4_address_t.hpp"
 
 class udp_receiver_t
         : public receiver_t {
