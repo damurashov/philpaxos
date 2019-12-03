@@ -75,6 +75,13 @@ build CMakeFiles/hl3.dir/local_udp_server_i.cpp.o: CXX_COMPILER__hl3 ../../local
   OBJECT_FILE_DIR = CMakeFiles/hl3.dir
   TARGET_COMPILE_PDB = CMakeFiles/hl3.dir/
   TARGET_PDB = hl3.pdb
+build CMakeFiles/hl3.dir/local_udp_socket_t.cpp.o: CXX_COMPILER__hl3 ../../local_udp_socket_t.cpp || cmake_object_order_depends_target_hl3
+  DEP_FILE = CMakeFiles/hl3.dir/local_udp_socket_t.cpp.o.d
+  FLAGS = -O3 -DNDEBUG   -std=gnu++1z
+  OBJECT_DIR = CMakeFiles/hl3.dir
+  OBJECT_FILE_DIR = CMakeFiles/hl3.dir
+  TARGET_COMPILE_PDB = CMakeFiles/hl3.dir/
+  TARGET_PDB = hl3.pdb
 build CMakeFiles/hl3.dir/test_server_t.cpp.o: CXX_COMPILER__hl3 ../../test_server_t.cpp || cmake_object_order_depends_target_hl3
   DEP_FILE = CMakeFiles/hl3.dir/test_server_t.cpp.o.d
   FLAGS = -O3 -DNDEBUG   -std=gnu++1z
@@ -90,7 +97,7 @@ build CMakeFiles/hl3.dir/test_server_t.cpp.o: CXX_COMPILER__hl3 ../../test_serve
 #############################################
 # Link the executable hl3
 
-build hl3: CXX_EXECUTABLE_LINKER__hl3 CMakeFiles/hl3.dir/address_pool_t.cpp.o CMakeFiles/hl3.dir/hl3_d.cpp.o CMakeFiles/hl3.dir/local_udp_address.cpp.o CMakeFiles/hl3.dir/local_udp_server_i.cpp.o CMakeFiles/hl3.dir/test_server_t.cpp.o
+build hl3: CXX_EXECUTABLE_LINKER__hl3 CMakeFiles/hl3.dir/address_pool_t.cpp.o CMakeFiles/hl3.dir/hl3_d.cpp.o CMakeFiles/hl3.dir/local_udp_address.cpp.o CMakeFiles/hl3.dir/local_udp_server_i.cpp.o CMakeFiles/hl3.dir/local_udp_socket_t.cpp.o CMakeFiles/hl3.dir/test_server_t.cpp.o
   FLAGS = -O3 -DNDEBUG
   LINK_FLAGS = -rdynamic
   OBJECT_DIR = CMakeFiles/hl3.dir

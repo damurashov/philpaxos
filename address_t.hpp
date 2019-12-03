@@ -9,17 +9,14 @@
 class address_t {
 
 public:
-    virtual
-    sockaddr         get_raw_address     () {};
-
     template <
      typename Rep,
      typename Period>
-    bool             send                (int sockfd, std::string_view msg, std::chrono::duration<Rep, Period> wait_timeout);
+    bool             send      (int sockfd, std::string_view msg, std::chrono::duration<Rep, Period> wait_timeout);
 
-    virtual bool     send                (int sockfd, std::string_view msg) {};
-                     local_udp_address_t (uint16_t port);
-                     local_udp_address_t (const sockaddr_in& address);
+    virtual bool     send      (int sockfd, std::string_view msg) {};
+                     address_t (uint16_t port);
+                     address_t (const sockaddr_in& address);
 };
 
 /* --------------------------------------------------------------------------- *
