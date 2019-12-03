@@ -7,16 +7,18 @@
 #include <arpa/inet.h>
 #include <iostream>
 
-class udp_receiver_t
-        : public receiver_t {
+class udp_receiver_t {
+
+protected:
+    int m_socket;
 
 private:
     char m_buf[message_buffer_size];
 
 public:
-    using receiver_t::receiver_t;
+    udp_receiver_t (int socket) : m_socket(socket) {}
 
-    virtual std::tuple<std::string_view, address_t&&, bool> receive () override {
+    std::tuple<std::string_view, ip4_address_t, bool> receive () {
         using namespace std;
 
         sockaddr_in address;
@@ -40,6 +42,30 @@ public:
             , f_success};
     }
 
+    template<
+     typename Rep,
+     typename Period>
+    std::tuple<
+     std::string_view,
+     ip4_address_t, bool> receive    (std::chrono::duration<Rep, Period> timeout);
 };
+
+
+template <typename Rep, typename Period>
+std::tuple<std::string_view, ip4_address_t, bool> udp_receiver_t::receive (std::chrono::duration<Rep, Period> timeout) {
+    using namespace std;
+
+    bool f;
+    timeval t;
+    t.tv_sec = chrono::duration_cast<chrono::seconds>(timeout).count();
+    t.tv_usec = chrono::duration_cast<chrono::microseconds>(timeout - chrono::seconds(t.tv_sec)).count();
+    setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, &t, sizeof(t)); /* Set wait timeout */
+    auto [message, sender, flag] = receive();
+    t.tv_sec = 0;
+    t.tv_usec = 0;
+    setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, &t, sizeof(t));/* Restore default (no timeout, blocking operation) */
+
+    return {message, sender, flag};
+}
 
 #endif /* UDP_RECEIVER_T_H */

@@ -100,8 +100,8 @@ int main(int argc, char **argv) {
     cout << "Received: " << endl;
     cout << message << endl;
 
-//    sender.send(socket, "It's me again");
-    ip4_address_t(60003).send(socket, "It's me again");
+    sender.send(socket, "It's me again");
+//    ip4_address_t(60003).send(socket, "It's me again");
 
 //    test_peer_t peer(50000);
 //    peer.run(true);

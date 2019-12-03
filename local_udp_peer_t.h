@@ -14,7 +14,7 @@ class local_udp_peer_t
 
 protected:
     local_udp_socket_t  socket() {return m_socket; }
-    receiver_t&         receiver() {return m_receiver;}
+    udp_receiver_t&     receiver() {return m_receiver;}
     virtual void        perform() = 0;
 
 public:
