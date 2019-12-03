@@ -13,14 +13,20 @@
 
 {
   "directory": "/home/sleeplynerd/Documents/M2-Highload-3/build/default",
-  "command": "/usr/bin/c++    -O3 -DNDEBUG   -std=gnu++1z -o CMakeFiles/hl3.dir/local_ip4_address_t.cpp.o -c /home/sleeplynerd/Documents/M2-Highload-3/local_ip4_address_t.cpp",
-  "file": "/home/sleeplynerd/Documents/M2-Highload-3/local_ip4_address_t.cpp"
+  "command": "/usr/bin/c++    -O3 -DNDEBUG   -std=gnu++1z -o CMakeFiles/hl3.dir/ip4_address_t.cpp.o -c /home/sleeplynerd/Documents/M2-Highload-3/ip4_address_t.cpp",
+  "file": "/home/sleeplynerd/Documents/M2-Highload-3/ip4_address_t.cpp"
 },
 
 {
   "directory": "/home/sleeplynerd/Documents/M2-Highload-3/build/default",
   "command": "/usr/bin/c++    -O3 -DNDEBUG   -std=gnu++1z -o CMakeFiles/hl3.dir/local_udp_address.cpp.o -c /home/sleeplynerd/Documents/M2-Highload-3/local_udp_address.cpp",
   "file": "/home/sleeplynerd/Documents/M2-Highload-3/local_udp_address.cpp"
+},
+
+{
+  "directory": "/home/sleeplynerd/Documents/M2-Highload-3/build/default",
+  "command": "/usr/bin/c++    -O3 -DNDEBUG   -std=gnu++1z -o CMakeFiles/hl3.dir/local_udp_peer_t.cpp.o -c /home/sleeplynerd/Documents/M2-Highload-3/local_udp_peer_t.cpp",
+  "file": "/home/sleeplynerd/Documents/M2-Highload-3/local_udp_peer_t.cpp"
 },
 
 {
