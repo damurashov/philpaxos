@@ -12,6 +12,7 @@
 #include "test_server_t.h"
 #include "local_udp_socket_t.hpp"
 #include "udp_receiver.hpp"
+#include "test_peer_t.hpp"
 
 using namespace std;
 
@@ -84,13 +85,13 @@ void batya() {
 
 int main(int argc, char **argv) {
     char buf[50];
-    local_udp_socket_t socket(60006);
+    local_udp_socket_t socket(60002);
     udp_receiver_t receiver(socket);
 
     if (socket) {
         cout << "Socket : created" << endl;
     }
-    test_server_t serv(60007);
+    test_server_t serv(60003);
     serv.run(true);
     serv.send(socket, "New Batya!\0");
 
@@ -98,4 +99,11 @@ int main(int argc, char **argv) {
     auto [message, sender, flag] = receiver.receive();
     cout << "Received: " << endl;
     cout << message << endl;
+
+    test_peer_t peer(50000);
+    peer.run(true);
+//    peer.send(socket, "Message");
+    ip4_address_t address(50000);
+    address.send(socket, "Message");
+
 }

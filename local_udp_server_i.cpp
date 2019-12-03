@@ -48,7 +48,7 @@ void local_udp_server_i::wait() {
 void local_udp_server_i::run(bool f_as_side_process) {
     if (f_as_side_process) {
         m_pid = fork();
-        if (m_pid > 0) {
+        if (m_pid == 0) {
             perform();
         }
     } else {

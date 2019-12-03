@@ -1,11 +1,13 @@
 #include "local_udp_address.h"
 #include "parameters.h"
+#include <arpa/inet.h>
 
 using namespace std;
 
 local_udp_address_t::local_udp_address_t(uint16_t port) {
     m_address.sin_family = AF_INET;
-    m_address.sin_addr.s_addr = INADDR_ANY;
+//    m_address.sin_addr.s_addr = INADDR_ANY;
+    m_address.sin_addr.s_addr = inet_addr("127.0.0.1");
     m_address.sin_port = port;
 }
 

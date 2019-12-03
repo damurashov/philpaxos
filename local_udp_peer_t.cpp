@@ -18,7 +18,7 @@ void local_udp_peer_t::wait() {
 void local_udp_peer_t::run(bool f_side_process) {
     if (f_side_process) {
         m_pid = fork();
-        if (m_pid > 0) {
+        if (m_pid == 0) {
             perform();
             m_pid = -1;
         }
