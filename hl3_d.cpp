@@ -10,6 +10,7 @@
 #include <iomanip>
 
 #include "test_server_t.h"
+#include "local_udp_socket_t.hpp"
 
 using namespace std;
 
@@ -54,10 +55,7 @@ int serv() {
     return 0;
 }
 
-
-
-int main(int argc, char **argv) {
-//    serv();
+void batya() {
     int sock = socket(AF_INET, SOCK_DGRAM, 0);
     int res;
     char buf[50];
@@ -81,5 +79,19 @@ int main(int argc, char **argv) {
     res = recv(sock, buf, 50, 0);
     cout << res << endl;
     cout << buf << endl;
-    return 0;
+}
+
+int main(int argc, char **argv) {
+    char buf[50];
+    local_udp_socket_t socket(60006);
+    if (socket) {
+        cout << "Socket : created" << endl;
+    }
+    test_server_t serv(60007);
+    serv.run(true);
+    serv.send(socket, "New Batya!\0");
+
+    int res = recv(socket, buf, 50, 0);
+    cout << "Received: " << endl;
+    cout << buf << endl;
 }
