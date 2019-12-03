@@ -84,7 +84,6 @@ void batya() {
 }
 
 int main(int argc, char **argv) {
-    char buf[50];
     local_udp_socket_t socket(60002);
     udp_receiver_t receiver(socket);
 
@@ -93,17 +92,21 @@ int main(int argc, char **argv) {
     }
     test_server_t serv(60003);
     serv.run(true);
-    serv.send(socket, "New Batya!\0");
+//    serv.send(socket, "New Batya!\0");
+    ip4_address_t(60003).send(socket, "New Batya!!!");
 
 //    int res = recv(socket, buf, 50, 0);
     auto [message, sender, flag] = receiver.receive();
     cout << "Received: " << endl;
     cout << message << endl;
 
-    test_peer_t peer(50000);
-    peer.run(true);
-//    peer.send(socket, "Message");
-    ip4_address_t address(50000);
-    address.send(socket, "Message");
+//    sender.send(socket, "It's me again");
+    ip4_address_t(60003).send(socket, "It's me again");
+
+//    test_peer_t peer(50000);
+//    peer.run(true);
+////    peer.send(socket, "Message");
+//    ip4_address_t address(50000);
+//    address.send(socket, "Message");
 
 }

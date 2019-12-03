@@ -9,6 +9,8 @@
 class address_t {
 
 public:
+    virtual         ~address_t (){}
+
     template <
      typename Rep,
      typename Period>

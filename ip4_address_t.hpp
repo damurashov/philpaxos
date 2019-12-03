@@ -15,7 +15,7 @@ public:
                     ip4_address_t   (uint16_t port);
     virtual bool    send            (int sockfd, std::string_view msg) override;
 
-                    ip4_address_t   (const sockaddr_in& address) {m_address = address;}
+                    ip4_address_t   (const sockaddr_in& address);
 };
 
 #endif /* LOCAL_IP4_ADDRESS_T_H */

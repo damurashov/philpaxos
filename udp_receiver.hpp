@@ -4,6 +4,8 @@
 #include "receiver_t.hpp"
 #include "parameters.h"
 #include "ip4_address_t.hpp"
+#include <arpa/inet.h>
+#include <iostream>
 
 class udp_receiver_t
         : public receiver_t {
@@ -18,7 +20,7 @@ public:
         using namespace std;
 
         sockaddr_in address;
-        auto addrlen = sizeof(address);
+        int addrlen = sizeof(address);
         int res = recvfrom(m_socket
                 , m_buf
                 , message_buffer_size
@@ -28,8 +30,13 @@ public:
 
         bool f_success = (res == -1) ? false : true;
 
+        cout << "Checking udp_receiver::receive" << endl;
+        cout << (address.sin_addr.s_addr == inet_addr("127.0.0.1")) << endl;
+        cout << (address.sin_family == AF_INET) << endl;
+        cout << " port : " << address.sin_port << endl;
+
         return {string_view(m_buf, message_buffer_size)
-            , ip4_address_t(address)
+            , ip4_address_t(address) /* Try to use port */
             , f_success};
     }
 

@@ -11,7 +11,7 @@
 class local_udp_server_i
         : public local_udp_address_t {
 
-private:
+protected:
     const int             m_socket_des;
     int                   m_pid;
 
