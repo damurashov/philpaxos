@@ -1,4 +1,5 @@
 #include "local_udp_address.h"
+#include "parameters.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ local_udp_address_t::local_udp_address_t(const sockaddr_in& address)
 bool local_udp_address_t::send(int sockfd, string_view msg) {
     return sendto(sockfd
             , msg.data()
-            , min<int>(msg.length(), message_buffer_length)
+            , min<int>(msg.length(), message_buffer_size)
             , 0
             , (sockaddr*)&m_address
             , sizeof(m_address));

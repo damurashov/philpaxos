@@ -1,5 +1,5 @@
 #include "local_udp_socket_t.hpp"
-
+#include <arpa/inet.h>
 
 local_udp_socket_t::local_udp_socket_t(uint16_t port) {
     if ( (m_socket=socket(AF_INET,SOCK_DGRAM,0)) == -1) {
@@ -16,7 +16,8 @@ local_udp_socket_t::local_udp_socket_t(uint16_t port) {
     }
 
     m_address.sin_family = AF_INET;
-    m_address.sin_addr.s_addr = INADDR_ANY;
+//    m_address.sin_addr.s_addr = INADDR_ANY;
+    m_address.sin_addr.s_addr = inet_addr("127.0.0.1");
     m_address.sin_port = port;
     if (bind(m_socket, (sockaddr*)&m_address, sizeof(m_address)) == -1) {
         f_valid = false;

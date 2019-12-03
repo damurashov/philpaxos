@@ -12,22 +12,32 @@
 class receiver_t {
 
 protected:
+    int m_socket;
+
+public:
+                        receiver_t (int socket) : m_socket(socket) {}
+                        receiver_t () = delete;
+    virtual            ~receiver_t () {}
+
     virtual
     std::tuple<
      std::string_view,
-     address_t&&, bool> receive(int socket) {};
+     address_t&&, bool> receive    () {};
 
     template<
      typename Rep,
      typename Period>
     std::tuple<
      std::string_view,
-     address_t&&, bool> receive(int socket, std::chrono::duration<Rep, Period> timeout);
-
+     address_t&&, bool> receive    (std::chrono::duration<Rep, Period> timeout);
 };
 
+/* --------------------------------------------------------------------------- *
+ *                           Templated members                                 *
+ * --------------------------------------------------------------------------- */
+
 template <typename Rep, typename Period>
-std::tuple<std::string_view, address_t&&, bool> receive (int m_socket, std::chrono::duration<Rep, Period> timeout) {
+std::tuple<std::string_view, address_t&&, bool> receive (std::chrono::duration<Rep, Period> timeout) {
     using namespace std;
 
     bool f;
