@@ -1,3 +1,0 @@
-/home/sleeplynerd/Documents/M2-Highload-3/build/default/CMakeFiles/rebuild_cache.dir
-/home/sleeplynerd/Documents/M2-Highload-3/build/default/CMakeFiles/hl3.dir
-/home/sleeplynerd/Documents/M2-Highload-3/build/default/CMakeFiles/edit_cache.dir
