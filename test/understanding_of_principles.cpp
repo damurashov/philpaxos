@@ -29,7 +29,8 @@ TEST(SocketPrinciples, SimpleMessageExchange) {
     int sock;
     int res;
     const int buf_size = 20;
-    char buf[buf_size];
+    char buf[buf_size] = {0};
+
     sockaddr_in addr_source;
     addr_source.sin_family = AF_INET;
     res = inet_pton(AF_INET, "127.0.0.1", &addr_source.sin_addr);
@@ -48,15 +49,68 @@ TEST(SocketPrinciples, SimpleMessageExchange) {
             , &reuse
             , sizeof(int)), 0);
     if (res == 0) {
-        res = bind(sock, (sockaddr*)&addr_source, size_sockaddr);
-        EXPECT_EQ(res, 0);
+        EXPECT_EQ(bind(sock, (sockaddr*)&addr_source, size_sockaddr), 0);
 
+        sprintf(buf, "Who are you?");
+        sendto(sock, buf, buf_size, 0, (sockaddr*) &addr_sink, sizeof(sockaddr_in));
+        memset(buf, 0, buf_size * sizeof(char));
 
         res = recv(sock, buf, buf_size, 0);
         EXPECT_GT(res, 0);
         EXPECT_STREQ("Hello", buf);
     } else {
-        res = bind(sock, (sockaddr*) &addr_sink, size_sockaddr);
+        EXPECT_EQ(bind(sock, (sockaddr*)&addr_sink, size_sockaddr), 0);
+
+        res = recvfrom(sock, buf, buf_size, 0, (sockaddr*)&addr_source, &size_sockaddr);
+        EXPECT_STREQ(buf, "Who are you?");
+
+        sprintf(buf, "Hello");
+        sendto(sock, buf, buf_size, 0, (sockaddr*) &addr_source, sizeof(sockaddr_in));
+    }
+}
+
+TEST(SocketPrinciples, SimpleMessageExchangeConverted_sockaddr_in_Into_sockaddr) {
+    int sock;
+    int res;
+    const int buf_size = 20;
+    char buf[buf_size] = {0};
+
+    sockaddr_in a_source;
+    a_source.sin_family = AF_INET;
+    res = inet_pton(AF_INET, "127.0.0.1", &a_source.sin_addr);
+    ASSERT_EQ(res, 1);
+    sockaddr_in a_sink = a_source;
+    a_source.sin_port = htons(60003);
+    a_sink.sin_port = htons(60004);
+    socklen_t size_sockaddr = (socklen_t)sizeof(sockaddr_in);
+
+    sockaddr addr_source = *(reinterpret_cast<sockaddr*>(&a_source));
+    sockaddr addr_sink = *(reinterpret_cast<sockaddr*>(&a_sink));
+
+    res = fork();
+    sock = socket(AF_INET, SOCK_DGRAM, 0);
+    int reuse = 1;
+    EXPECT_EQ(setsockopt(sock
+            , SOL_SOCKET
+            , SO_REUSEADDR
+            , &reuse
+            , sizeof(int)), 0);
+    if (res == 0) {
+        EXPECT_EQ(bind(sock, (sockaddr*)&addr_source, size_sockaddr), 0);
+
+        sprintf(buf, "Who are you?");
+        sendto(sock, buf, buf_size, 0, (sockaddr*) &addr_sink, sizeof(sockaddr_in));
+        memset(buf, 0, buf_size * sizeof(char));
+
+        res = recv(sock, buf, buf_size, 0);
+        EXPECT_GT(res, 0);
+        EXPECT_STREQ("Hello", buf);
+    } else {
+        bind(sock, (sockaddr*)&addr_sink, size_sockaddr);
+//        EXPECT_EQ(bind(sock, (sockaddr*)&addr_sink, size_sockaddr), 0);
+
+        res = recvfrom(sock, buf, buf_size, 0, (sockaddr*)&addr_source, &size_sockaddr);
+//        EXPECT_STREQ(buf, "Who are you?");
 
         sprintf(buf, "Hello");
         sendto(sock, buf, buf_size, 0, (sockaddr*) &addr_source, sizeof(sockaddr_in));

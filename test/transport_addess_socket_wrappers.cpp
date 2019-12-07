@@ -49,11 +49,15 @@ TEST_F(SocketAddressWrappers, sockaddr_sa_familyIsAF_INET) {
 }
 
 TEST_F(SocketAddressWrappers, CTORsOfip4_address_t) {
+    /* Todo: The following test is incorrect.
+     * The network byte order should be used, not the host one!!!
+     * */
+
     ip4_address_t addr1("127.0.0.1", 123);
     ip4_address_t addr2(123);
     sockaddr_in address;
     address.sin_addr.s_addr = inet_addr("127.0.0.1");
-    address.sin_port = 123;
+    address.sin_port = htons(123);
     address.sin_family = AF_INET;
     ip4_address_t addr3(address);
 
@@ -67,9 +71,9 @@ TEST_F(SocketAddressWrappers, CTORsOfip4_address_t) {
     EXPECT_EQ(data1->sin_family, AF_INET);
     EXPECT_EQ(data2->sin_family, AF_INET);
     EXPECT_EQ(data3->sin_family, AF_INET);
-    EXPECT_EQ(data1->sin_port, 123);
-    EXPECT_EQ(data2->sin_port, 123);
-    EXPECT_EQ(data3->sin_port, 123);
+    EXPECT_EQ(data1->sin_port, ntohs(123));
+    EXPECT_EQ(data2->sin_port, ntohs(123));
+    EXPECT_EQ(data3->sin_port, ntohs(123));
 }
 
 TEST_F(SocketAddressWrappers, SendConstantLengthMessage) {
@@ -100,6 +104,7 @@ TEST_F(SocketAddressWrappers, SendConstantLengthMessage) {
                 , &addrlen);
         EXPECT_GT(nrecv, 0);
         EXPECT_STREQ(mMsgBuf, StrReceiverSends);
+        cout << string(' ', 20) << mMsgBuf <<endl;
     } else {
         /* We are in sink process */
         sockaddr addrfrom;
