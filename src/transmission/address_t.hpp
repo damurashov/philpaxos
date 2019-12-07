@@ -9,9 +9,10 @@ protected:
     sockaddr m_address;
 
 public:
-    address_t() = default;
-    address_t(const sockaddr& address) : m_address(address) {}
-    const sockaddr* data() const {return &m_address; }
+                    address_t               () = default;
+                    address_t               (const sockaddr& address) : m_address(address) {}
+                    operator const sockaddr*()                                             {return data();}
+    const sockaddr* data                    () const                                       {return &m_address; }
 };
 
 #endif /* ADDRESS_T_H */

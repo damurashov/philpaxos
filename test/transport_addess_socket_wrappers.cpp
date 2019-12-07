@@ -27,31 +27,14 @@ struct SocketAddressWrappers : public ::testing::Test {
 //    }
 };
 
-//TEST_F(SocketAddressWrappers, inet_ntopIsUsedRightWay) {
-////    SCOPED_TRACE("\nMyMESSAGE--------------------------");
-//    sockaddr_in address;
-//    char ip[INET_ADDRSTRLEN] = {0};
-//    string_view sv("127.0.0.1");
-//    int res = inet_pton(AF_INET, sv.data(), &address.sin_addr);
-//    EXPECT_EQ(res, 1) << "1:good, 0:wrong format, -1:error" << endl;
-////    EXPECT_EQ(address.sin_family, AF_INET) << "Should be AF_INET = " << AF_INET << endl; /*WRONG! inet_<p|n>to<n|p> is for sockaddr::sin_addr ONLY!*/
-//    inet_ntop(AF_INET, &address.sin_addr, ip, INET_ADDRSTRLEN);
-//    EXPECT_STREQ(ip, "127.0.0.1");
-//}
-
-
-
-TEST_F(SocketAddressWrappers, sockaddr_sa_familyIsAF_INET) {
+TEST_F(SocketAddressWrappers, sockaddr_sa_family_is_af_inet) {
     char c;
     ip4_address_t addr("127.0.0.1", 123);
 //    const sockaddr_in* saddrin = reinterpret_cast<const sockaddr_in*>(addr.data());
     ASSERT_EQ(addr.data()->sa_family, AF_INET);
 }
 
-TEST_F(SocketAddressWrappers, CTORsOfip4_address_t) {
-    /* Todo: The following test is incorrect.
-     * The network byte order should be used, not the host one!!!
-     * */
+TEST_F(SocketAddressWrappers, ctor_of_ip4_address_t) {
 
     ip4_address_t addr1("127.0.0.1", 123);
     ip4_address_t addr2(123);
@@ -76,15 +59,15 @@ TEST_F(SocketAddressWrappers, CTORsOfip4_address_t) {
     EXPECT_EQ(data3->sin_port, ntohs(123));
 }
 
-TEST_F(SocketAddressWrappers, SendConstantLengthMessage) {
+TEST_F(SocketAddressWrappers, constant_length_message_sending) {
     mSocketPeerSource.bind(ip4_address_t("127.0.0.1", PeerSourcePort));
     mSocketPeerSink.bind(mAddrPeerSink);
     int pid = fork();
 
     const char StrSenderSends[] = "Who are you?";
     const char StrReceiverSends[] = "I'm a sink process";
-    if (pid == 0) {
-        /* We are in source process */
+    if (pid == 0) { /* TODO: != 0 */
+        /* We are in parent process */
         strcpy(mMsgBuf, StrSenderSends);
         int res = sendto(mSocketPeerSource
                 , mMsgBuf
@@ -106,7 +89,7 @@ TEST_F(SocketAddressWrappers, SendConstantLengthMessage) {
         EXPECT_STREQ(mMsgBuf, StrReceiverSends);
         cout << string(' ', 20) << mMsgBuf <<endl;
     } else {
-        /* We are in sink process */
+        /* We are in chjld process */
         sockaddr addrfrom;
         socklen_t addrlen = (socklen_t) sizeof(addrfrom);
         ssize_t nrecv = recvfrom(mSocketPeerSink

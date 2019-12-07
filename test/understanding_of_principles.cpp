@@ -13,7 +13,7 @@
 using namespace std;
 
 
-TEST(SocketPrinciples, inet_ptonIsUsedRightWay) {
+TEST(SocketPrinciples, inet_pton_is_used_right_way) {
 //    SCOPED_TRACE("\nMyMESSAGE--------------------------");
     sockaddr_in address;
     char ip[INET_ADDRSTRLEN] = {0};
@@ -69,7 +69,7 @@ TEST(SocketPrinciples, SimpleMessageExchange) {
     }
 }
 
-TEST(SocketPrinciples, SimpleMessageExchangeConverted_sockaddr_in_Into_sockaddr) {
+TEST(SocketPrinciples, constant_length_message_sending_converting_sockaddr_in_into_sockaddr) {
     int sock;
     int res;
     const int buf_size = 20;
