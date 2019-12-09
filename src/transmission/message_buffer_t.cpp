@@ -13,6 +13,6 @@ int message_buffer_t::msglen(bool f_including_term) {
 
     find_if(this->begin(), this->end(), is_term_symb);
     return f_including_term
-            ? msglen+1
+            ? min<int>(msglen+1, size())
             : msglen;
 }

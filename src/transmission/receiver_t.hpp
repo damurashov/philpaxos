@@ -11,14 +11,19 @@
 #include <optional>
 #include <sys/socket.h>
 
-class receiver_t {
+#include "utility/socket_reference_owner_t.hpp"
 
-    socket_t&          m_socket;
+class receiver_t
+        : public socket_reference_owner_t<receiver_t> {
 
-protected:
-    socket_t&          socket     () {return m_socket; }
+//    socket_t&          m_socket;
+//
+//protected:
+//    socket_t&          socket     () {return m_socket; }
 
 public:
+    using socket_reference_owner_t<receiver_t>::socket_reference_owner_t;
+
     virtual
     std::tuple<
      std::string_view,
@@ -31,7 +36,7 @@ public:
      std::string_view,
      address_t, bool>  receive    (std::chrono::duration<Rep, Period> timeout);
 
-                       receiver_t (socket_t& socket) : m_socket(socket) {}
+//                       receiver_t (socket_t& socket) : m_socket(socket) {}
     virtual           ~receiver_t () {}
 };
 
@@ -41,9 +46,9 @@ public:
 
 template <typename Rep, typename Period>
 std::tuple<std::string_view, address_t, bool> receiver_t::receive (std::chrono::duration<Rep, Period> timeout) {
-    m_socket.set_timeout(timeout_type_t::timeout_wait_receive, timeout);
+    socket().set_timeout(timeout_type_t::timeout_wait_receive, timeout);
     auto [message, sender, flag] = receive();
-    m_socket.set_timeout(timeout_type_t::timeout_wait_receive);
+    socket().set_timeout(timeout_type_t::timeout_wait_receive);
     return {message, sender, flag};
 }
 

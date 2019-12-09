@@ -9,5 +9,8 @@
 #include "parameters.hpp"
 #include "message_buffer_t.hpp"
 #include "udp_receiver_t.hpp"
+#include "sender_t.hpp"
+#include "udp_sender_t.hpp"
+#include "udp_messenger_t.hpp"
 
 #endif /* TRANSMISSION_ALL_H */

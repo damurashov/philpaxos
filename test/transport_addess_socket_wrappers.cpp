@@ -66,7 +66,8 @@ TEST_F(SocketAddressWrappers, constant_length_message_sending) {
 
     const char StrSenderSends[] = "Who are you?";
     const char StrReceiverSends[] = "I'm a sink process";
-    if (pid == 0) { /* TODO: != 0 */
+//    if (pid == 0) { /* TODO: != 0 */
+    if (pid != 0) {
         /* We are in parent process */
         strcpy(mMsgBuf, StrSenderSends);
         int res = sendto(mSocketPeerSource
