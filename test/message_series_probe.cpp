@@ -10,6 +10,7 @@
 #include <functional>
 #include <array>
 #include <utility>
+#include <string>
 
 using namespace std;
 using namespace chrono_literals;
@@ -51,7 +52,54 @@ protected:
     }
 };
 
-TEST_F(UdpMessageSeriesProbe, twice_ABAB) {
+TEST_F(UdpMessageSeriesProbe, circle_abca_n_iters) {
+    const int n_iters         = 5;
+    const int n_nodes         = 3;
+    auto      nodes             {nports<6000, n_nodes>()};
+
+    auto run ([&](int nodeid) -> void {
+
+        auto&           recipient         = nodes[ (nodeid+1) % n_nodes].second;
+        udp_messenger_t messenger          (nodes[nodeid].first, m_msgbuf);
+        bool            f_is_primary_node = (nodeid == (n_nodes-1) );
+
+        auto as_primary_iter([&](int iter) {
+            auto itermsg{to_string(iter)};
+            messenger.send(itermsg, recipient);
+            auto [message, sender, flag] = messenger.receive();
+            ASSERT_STREQ(message.data(), itermsg.data());
+        });
+
+        auto as_non_primary_iter([&](int) {
+            auto [message, sender, flag] = messenger.receive();
+            messenger.send(message, recipient);
+        });
+
+        auto perform([&](auto& callable_iter) {
+            for (int i = 0; i < n_iters; ++i) {
+                callable_iter(i);
+            }
+        });
+
+
+        if (!f_is_primary_node) {
+            int pid = fork();
+            if (pid != 0) {
+                return;
+            }
+            /* This is secondary node */
+            perform(as_non_primary_iter);
+        } else {
+            perform(as_primary_iter);
+        }
+    });
+
+    for (int nodeid = 0; nodeid < n_nodes-1; nodeid++) {
+        run(nodeid);
+    }
+}
+
+TEST_F(UdpMessageSeriesProbe, line_ab_twice) {
 
     const int n_iters = 2;
     const int id_parent = 0;
@@ -75,7 +123,7 @@ TEST_F(UdpMessageSeriesProbe, twice_ABAB) {
     }
 }
 
-TEST_F(UdpMessageSeriesProbe, plain_AB) {
+TEST_F(UdpMessageSeriesProbe, line_ab) {
     auto nodes{nports<6000, 2>()};
     auto msg_to_send = "Message"sv;
     ASSERT_TRUE(nodes[0].first);

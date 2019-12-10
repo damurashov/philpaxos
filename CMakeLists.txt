@@ -29,3 +29,9 @@ target_link_libraries(hl3_test_ALL hl3 gtest gtest_main pthread)
 
 add_executable(hl3_test_messaging "test/message_series_probe.cpp")
 target_link_libraries(hl3_test_messaging hl3 gtest gtest_main pthread)
+
+add_executable(hl3_test_receivers_senders "test/receivers_senders.cpp")
+target_link_libraries(hl3_test_receivers_senders hl3 gtest gtest_main pthread)
+
+add_executable(hl3_test_transport_addess_socket_wrappers "test/transport_addess_socket_wrappers.cpp")
+target_link_libraries(hl3_test_transport_addess_socket_wrappers hl3 gtest gtest_main pthread)
