@@ -9,14 +9,18 @@
 class sender_t
         : public socket_reference_owner_t<sender_t> {
 
-public:
-    using socket_reference_owner_t<sender_t>::socket_reference_owner_t;
+protected:
+    inline virtual bool perform_send(std::string_view message, const address_t& recipient) {return false;}
 
-    virtual bool send(std::string_view message, const address_t& recipient) {return false;}
+public:
+
+    inline bool send(std::string_view message, const address_t& recipient) {return perform_send(message, recipient);}
 
     template <typename Rep, typename Period>
     bool send(std::string_view message, const address_t& recipient, std::chrono::duration<Rep, Period> timeout);
     virtual ~sender_t() {}
+
+    using socket_reference_owner_t<sender_t>::socket_reference_owner_t;
 };
 
 /* --------------------------------------------------------------------------- *

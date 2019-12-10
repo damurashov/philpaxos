@@ -45,9 +45,8 @@ public:
     int                            data           () const {return m_socket; }
 
     template<
-     typename Rep = int,
-     typename Period
-      = std::chrono::milliseconds>
+     typename Rep=int,
+     typename Period=std::ratio<1>>
     void                           set_timeout    (timeout_type_t
                                                   , std::chrono::duration<Rep, Period> = std::chrono::duration<Rep,Period>(0));
 };

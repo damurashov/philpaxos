@@ -4,40 +4,54 @@
 #include <iostream>
 #include <string_view>
 #include <thread>
+#include <chrono>
+#include <ratio>
+#include <optional>
+#include <functional>
+#include <array>
+#include <utility>
 
 using namespace std;
 using namespace chrono_literals;
 
-struct ReceiversSenders : public ::testing::Test {
+struct UdpReceiversSenders : public ::testing::Test {
 protected:
     ip4_address_t    m_address_sink   {6007};
-//    ip4_address_t    m_address_sink2  {6009};
+    ip4_address_t    m_address_sink2  {6009};
     ip4_address_t    m_address_source {6008};
     socklen_t        m_sizesockaddr   {sizeof(sockaddr)};
     udp_socket_t     m_socket_sink;
-//    udp_socket_t     m_socket_sink2;
+    udp_socket_t     m_socket_sink2;
     udp_socket_t     m_socket_source;
     message_buffer_t m_msgbuf;
 
-    ReceiversSenders() {
+    UdpReceiversSenders() {
         m_msgbuf.clear();
     }
 
     void SetUp() override {
         m_socket_sink.bind(m_address_sink);
         m_socket_source.bind(m_address_source);
-//        m_socket_sink2.bind(m_address_sink2);
+        m_socket_sink2.bind(m_address_sink2);
     }
 
 };
 
-TEST_F(ReceiversSenders, constant_length_message_sending_messenger_receive_timeout) {
+//TEST_F(UdpReceiversSenders, constant_length_message_sending_sender_send_timeout) {
+//    ip4_address_t nonexistent_addr(60011);
+//    udp_sender_t sender(m_socket_source);
+//    bool f = sender.send("A message", nonexistent_addr, 10ms);
+//    EXPECT_FALSE(f); /* UDP does not require an established connection, so maybe it's OK when a message is sent to a nonexistent destination */
+//}
+
+TEST_F(UdpReceiversSenders, constant_length_message_sending_messenger_receive_timeout) {
     udp_messenger_t messenger(m_socket_source, m_msgbuf);
-//    auto [message, sender, flag] = messenger.receive(10ms);
-//    EXPECT_FALSE(flag);
+    auto [message, sender, flag] = messenger.receive(10ms);
+    EXPECT_FALSE(flag);
 }
 
-TEST_F(ReceiversSenders, constant_length_message_sending_udp_messenger_no_timeout) {
+TEST_F(UdpReceiversSenders, constant_length_message_sending_udp_messenger_no_timeout) {
+    ASSERT_TRUE(m_socket_source);
     if (fork() != 0) {  /* Parent (SOURCE) process */
         string_view msg_to_send = "Message for messenger";
         udp_messenger_t messenger(m_socket_source, m_msgbuf);
@@ -52,7 +66,7 @@ TEST_F(ReceiversSenders, constant_length_message_sending_udp_messenger_no_timeou
     }
 }
 
-TEST_F(ReceiversSenders, constant_length_message_sending_sender_receiver_no_timeout) {
+TEST_F(UdpReceiversSenders, constant_length_message_sending_sender_receiver_no_timeout) {
     if (fork() != 0) { /* Parent (SOURCE) process */
         string_view msg_to_send = "Message to send";
         udp_receiver_t receiver(m_socket_source, m_msgbuf);
@@ -69,7 +83,7 @@ TEST_F(ReceiversSenders, constant_length_message_sending_sender_receiver_no_time
     }
 }
 
-TEST_F(ReceiversSenders, check_receiver_returns_correct_address) {
+TEST_F(UdpReceiversSenders, check_receiver_returns_correct_address) {
     /* If the receiver does not return the correct sender's address,
      * two processes will be unable to finish this message chain */
 
@@ -97,7 +111,7 @@ TEST_F(ReceiversSenders, check_receiver_returns_correct_address) {
 }
 
 
-TEST_F(ReceiversSenders, constant_length_message_sending_receiver_no_timeout) {
+TEST_F(UdpReceiversSenders, constant_length_message_sending_receiver_no_timeout) {
     const char* source_sends = "I'm source\0";
     const char* sink_sends   = "I'm sink\0";
 //    EXPECT_TRUE(m_socket_sink.bind(m_address_sink));

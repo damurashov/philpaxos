@@ -23,5 +23,9 @@ add_subdirectory(third_party/googletest-master)
 file(GLOB TEST_SRCS "test/*.cpp" "test/*.hpp" "test/*.h" "test/*.c")
 include_directories(src)
 include_directories(${GTEST_INCLUDE_DIRS}) 
-add_executable(hl3_test ${TEST_SRCS})
-target_link_libraries(hl3_test hl3 gtest gtest_main pthread)
+
+add_executable(hl3_test_ALL ${TEST_SRCS})
+target_link_libraries(hl3_test_ALL hl3 gtest gtest_main pthread)
+
+add_executable(hl3_test_messaging "test/message_series_probe.cpp")
+target_link_libraries(hl3_test_messaging hl3 gtest gtest_main pthread)

@@ -13,7 +13,7 @@
 using namespace std;
 
 
-TEST(SocketPrinciples, inet_pton_is_used_right_way) {
+TEST(UdpSocketPrinciples, inet_pton_is_used_right_way) {
 //    SCOPED_TRACE("\nMyMESSAGE--------------------------");
     sockaddr_in address;
     char ip[INET_ADDRSTRLEN] = {0};

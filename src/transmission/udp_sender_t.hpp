@@ -9,7 +9,8 @@ class udp_sender_t
 
 public:
     udp_sender_t(udp_socket_t& socket) : sender_t(socket) {}
-    bool send(std::string_view message, const address_t& recipient) override;
+protected:
+    bool perform_send(std::string_view message, const address_t& recipient) override;
 
 };
 

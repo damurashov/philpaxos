@@ -9,7 +9,7 @@
 using namespace std;
 
 
-struct SocketAddressWrappers : public ::testing::Test {
+struct UdpSocketAddressWrappers : public ::testing::Test {
     static const uint16_t PeerSourcePort = 6666;
     static const uint16_t PeerSinkPort = 6667;
 //    ip4_address_t mAddrPeerSource   {PeerSourcePort};
@@ -20,21 +20,21 @@ struct SocketAddressWrappers : public ::testing::Test {
     const int     MessageBufferSize =20;
     char          mMsgBuf           [MessageBufferSize];
 
-//    SocketAddressWrappers() {
+//    UdpSocketAddressWrappers() {
 ////        mSocketPeerSource.bind(ip4_address_t("127.0.0.1", PeerSourcePort));
 ////        mSocketPeerSink.bind(mAddrPeerSink);
 ////        mPid = fork();
 //    }
 };
 
-TEST_F(SocketAddressWrappers, sockaddr_sa_family_is_af_inet) {
+TEST_F(UdpSocketAddressWrappers, sockaddr_sa_family_is_af_inet) {
     char c;
     ip4_address_t addr("127.0.0.1", 123);
 //    const sockaddr_in* saddrin = reinterpret_cast<const sockaddr_in*>(addr.data());
     ASSERT_EQ(addr.data()->sa_family, AF_INET);
 }
 
-TEST_F(SocketAddressWrappers, ctor_of_ip4_address_t) {
+TEST_F(UdpSocketAddressWrappers, ctor_of_ip4_address_t) {
 
     ip4_address_t addr1("127.0.0.1", 123);
     ip4_address_t addr2(123);
@@ -59,7 +59,7 @@ TEST_F(SocketAddressWrappers, ctor_of_ip4_address_t) {
     EXPECT_EQ(data3->sin_port, ntohs(123));
 }
 
-TEST_F(SocketAddressWrappers, constant_length_message_sending) {
+TEST_F(UdpSocketAddressWrappers, constant_length_message_sending) {
     mSocketPeerSource.bind(ip4_address_t("127.0.0.1", PeerSourcePort));
     mSocketPeerSink.bind(mAddrPeerSink);
     int pid = fork();

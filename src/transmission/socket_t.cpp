@@ -19,7 +19,7 @@ bool socket_t::bind(int sockfd, const sockaddr* address) {
 
     if (address && (sockfd != -1)) {
 //        return (::bind(fd, &addr, addrlen) == 0);
-        return (::bind(sockfd, address, sizeof(sockaddr)));
+        return (::bind(sockfd, address, sizeof(sockaddr)) == 0);
     }
     return false;
 }

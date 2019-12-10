@@ -3,7 +3,7 @@
 
 using namespace std;
 
-tuple<string_view, address_t, bool> udp_receiver_t::receive()  {
+tuple<string_view, address_t, bool> udp_receiver_t::perform_receive()  {
     m_buf.clear();
     sockaddr address;
     auto addrsize = sizeof(address);
@@ -11,6 +11,7 @@ tuple<string_view, address_t, bool> udp_receiver_t::receive()  {
             , (char*) m_buf
             , (int) m_buf
             , 0
+//            , MSG_DONTWAIT
             , &address
             , (socklen_t*)&addrsize);
     if (n_recv > 0) {

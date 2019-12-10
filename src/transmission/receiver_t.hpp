@@ -16,28 +16,29 @@
 class receiver_t
         : public socket_reference_owner_t<receiver_t> {
 
-//    socket_t&          m_socket;
-//
-//protected:
-//    socket_t&          socket     () {return m_socket; }
+protected:
+    virtual
+    std::tuple<
+     std::string_view,
+     address_t, bool>  perform_receive () {return {"<mock>", {}, false}; }
 
 public:
     using socket_reference_owner_t<receiver_t>::socket_reference_owner_t;
 
-    virtual
+    inline
     std::tuple<
      std::string_view,
-     address_t, bool>  receive    ();
+     address_t, bool>  receive         () {return perform_receive();}
+
+    virtual           ~receiver_t      () {}
 
     template<
      typename Rep,
      typename Period>
     std::tuple<
      std::string_view,
-     address_t, bool>  receive    (std::chrono::duration<Rep, Period> timeout);
+     address_t, bool>  receive         (std::chrono::duration<Rep, Period> timeout);
 
-//                       receiver_t (socket_t& socket) : m_socket(socket) {}
-    virtual           ~receiver_t () {}
 };
 
 /* --------------------------------------------------------------------------- *

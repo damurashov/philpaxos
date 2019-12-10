@@ -14,11 +14,12 @@ private:
     message_buffer_t&  m_buf;
 
 public:
-                       udp_receiver_t (udp_socket_t& socket, message_buffer_t& buf) : receiver_t(socket), m_buf(buf) {}
+                       udp_receiver_t  (udp_socket_t& socket, message_buffer_t& buf) : receiver_t(socket), m_buf(buf) {}
 
+protected:
     std::tuple<
      std::string_view,
-     address_t, bool>  receive        () override;
+     address_t, bool>  perform_receive () override;
 };
 
 
