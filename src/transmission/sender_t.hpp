@@ -17,7 +17,7 @@ public:
     inline bool send(std::string_view message, const address_t& recipient) {return perform_send(message, recipient);}
 
     template <typename Rep, typename Period>
-    bool send(std::string_view message, const address_t& recipient, std::chrono::duration<Rep, Period> timeout);
+    bool send(std::chrono::duration<Rep, Period> timeout, std::string_view message, const address_t& recipient);
     virtual ~sender_t() {}
 
     using socket_reference_owner_t<sender_t>::socket_reference_owner_t;
@@ -28,7 +28,7 @@ public:
  * --------------------------------------------------------------------------- */
 
 template <typename Rep, typename Period>
-bool sender_t::send(std::string_view message, const address_t& recipient, std::chrono::duration<Rep, Period> timeout) {
+bool sender_t::send(std::chrono::duration<Rep, Period> timeout, std::string_view message, const address_t& recipient) {
     socket().set_timeout(timeout_type_t::timeout_wait_send, timeout);
     bool f_sent = send(message, recipient);
     socket().set_timeout(timeout_type_t::timeout_wait_send);
