@@ -35,3 +35,6 @@ target_link_libraries(hl3_test_receivers_senders hl3 gtest gtest_main pthread)
 
 add_executable(hl3_test_transport_addess_socket_wrappers "test/transport_addess_socket_wrappers.cpp")
 target_link_libraries(hl3_test_transport_addess_socket_wrappers hl3 gtest gtest_main pthread)
+
+add_executable(hl3_test_local_udp_server "test/test_local_udp_server.cpp")
+target_link_libraries(hl3_test_local_udp_server hl3 gtest gtest_main pthread)
