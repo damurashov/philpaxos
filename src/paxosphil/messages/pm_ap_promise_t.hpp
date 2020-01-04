@@ -32,6 +32,7 @@ public:
     static bool       match                  (std::string_view);
     std::string       serialize              () const;
                       pm_ap_promise_t        (std::string_view);
+                      pm_ap_promise_t        () = default;
 
     promise_type_t    promise_type;
     int               fork_id;

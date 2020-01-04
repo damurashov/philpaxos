@@ -16,6 +16,7 @@ public:
     static bool       match          (std::string_view msg) {return std::regex_match(msg.data(), reg); }
     std::string       serialize      () const {return {prefix + s_ws + std::to_string(fork_id) + s_ws + std::to_string(n_prep_fork_id)}; }
                       pm_pc_key_t    (std::string_view);
+                      pm_pc_key_t    () = default;
     int               fork_id;
     int               n_prep_fork_id;
 };

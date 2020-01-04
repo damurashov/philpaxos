@@ -3,6 +3,7 @@
 
 #include <variant>
 #include <string_view>
+#include <string>
 #include "messages_all.hpp"
 
 template <typename ... MessageTypes>
@@ -47,6 +48,10 @@ auto deserialize(std::string_view msg) {
             , pm_pa_accept_t
             , pm_al_accepted_t
             , pm_lc_verdict_t>(msg);
+}
+
+auto deserialize(const std::string& s) {
+    return deserialize(std::string_view(s.data()));
 }
 
 #endif /* DESERIALIZER_HPP */

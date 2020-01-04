@@ -24,6 +24,7 @@ public:
     static bool       match          (std::string_view msg) {return std::regex_match(msg.data(), reg); }
     std::string       serialize      () const;
                       pm_pa_accept_t (std::string_view);
+                      pm_pa_accept_t () = default;
     int               fork_id;
     int               n_prep_fork_id;
     fork_action_t     fork_action;

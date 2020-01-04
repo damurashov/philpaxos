@@ -14,7 +14,8 @@ class pm_pa_prepare_t {
 public:
     static bool          match               (std::string_view msg) {return std::regex_match(msg.data(), reg);}
     std::string          serialize           () const {return {prefix + s_ws + std::to_string(fork_id) + s_ws + std::to_string(n_prep_fork_id)}; }
-                         pm_pa_prepare_t (std::string_view);
+                         pm_pa_prepare_t     (std::string_view);
+                         pm_pa_prepare_t     () = default;
     int                  fork_id;
     int                  n_prep_fork_id;
 };
