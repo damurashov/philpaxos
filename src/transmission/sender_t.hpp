@@ -16,6 +16,8 @@ public:
 
     inline bool send(std::string_view message, const address_t& recipient) {return perform_send(message, recipient);}
 
+    bool msend(std::string_view msg, const auto& container);
+
     template <typename Rep, typename Period>
     bool send(std::chrono::duration<Rep, Period> timeout, std::string_view message, const address_t& recipient);
     virtual ~sender_t() {}
@@ -26,6 +28,14 @@ public:
 /* --------------------------------------------------------------------------- *
  *                           Templated members impl.                           *
  * --------------------------------------------------------------------------- */
+
+bool sender_t::msend(std::string_view msg, const auto& container) {
+    bool f = true;
+    for (const auto& addr : container) {
+        f &= perform_send(msg, addr);
+    }
+    return f;
+}
 
 template <typename Rep, typename Period>
 bool sender_t::send(std::chrono::duration<Rep, Period> timeout, std::string_view message, const address_t& recipient) {
