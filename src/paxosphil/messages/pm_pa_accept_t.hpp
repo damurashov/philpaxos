@@ -7,8 +7,10 @@
 #include "fork_action.hpp"
 #include "verdict_t.hpp"
 #include "string_constants.hpp"
+#include "pm_serializable_t.hpp"
 
-class pm_pa_accept_t {
+class pm_pa_accept_t
+        : public pm_serializable_t {
     static inline
     const std::string prefix         {"P_ACCEPT"};
 
@@ -22,7 +24,7 @@ class pm_pa_accept_t {
                                       + s_ws + sr_ui}; /* " verdict"     */
 public:
     static bool       match          (std::string_view msg) {return std::regex_match(msg.data(), reg); }
-    std::string       serialize      () const;
+    std::string       serialize      () const override;
                       pm_pa_accept_t (std::string_view);
                       pm_pa_accept_t () = default;
     int               fork_id;
@@ -36,7 +38,7 @@ public:
  *                                    Impl                                     *
  * --------------------------------------------------------------------------- */
 
-std::string pm_pa_accept_t::serialize() const {
+inline std::string pm_pa_accept_t::serialize() const {
     using namespace std;
 
     return {prefix
@@ -47,7 +49,7 @@ std::string pm_pa_accept_t::serialize() const {
             + s_ws + to_string((int)verdict)};
 }
 
-pm_pa_accept_t::pm_pa_accept_t(std::string_view msg) {
+inline pm_pa_accept_t::pm_pa_accept_t(std::string_view msg) {
     using namespace std;
 
     cmatch buf;

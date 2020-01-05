@@ -6,6 +6,7 @@
 #include <regex>
 #include <string_view>
 #include "string_constants.hpp"
+#include "pm_serializable_t.hpp"
 
 enum class promise_type_t {
     nack = 0,
@@ -13,7 +14,8 @@ enum class promise_type_t {
     promise_have_value
 };
 
-class pm_ap_promise_t {
+class pm_ap_promise_t
+        : public pm_serializable_t {
     static inline
     const std::string prefix                 {"A_PROMISE"};
 
@@ -30,7 +32,7 @@ class pm_ap_promise_t {
     const std::regex  reg_promise_have_value {prefix + s_ws + sr_ui + s_ws + sr_ui + s_ws + sr_ui};
 public:
     static bool       match                  (std::string_view);
-    std::string       serialize              () const;
+    std::string       serialize              () const override;
                       pm_ap_promise_t        (std::string_view);
                       pm_ap_promise_t        () = default;
 

@@ -8,6 +8,8 @@
  * a - acceptor
  * l - listener */
 
+#include "pm_serializable_t.hpp"
+
 /* pm_<from>_<to>_<message-name>_t */
 /* Stage 0 (non-paxos) */
 #include "pm_cp_fork_action_t.hpp"

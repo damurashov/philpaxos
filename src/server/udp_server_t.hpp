@@ -3,6 +3,7 @@
 
 #include "server_t.hpp"
 //#include "../transmission/all.h"
+#include <string_view>
 
 class udp_server_t
         : public ::server_t {
@@ -18,7 +19,8 @@ protected:
     udp_messenger_t&    messenger                  () {return m_messenger; }
 
     inline auto         receive                    (auto... args) {return m_messenger.receive(args...); } /* Wrapper for messenger::receive */
-    inline auto         send                       (auto... args) {return m_messenger.send(args...); }    /* Wrapper for messenger::send */
+    inline bool         send                       (std::string_view msg, auto... args) {return m_messenger.send (msg, args...); }    /* Wrapper for messenger::send */
+    inline bool         msend                      (std::string_view msg, auto... args) {return m_messenger.msend(msg, args...); }   /* Wrapper for messenger::msend */
 
 public:
     inline

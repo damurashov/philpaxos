@@ -6,10 +6,12 @@
 #include <string_view>
 #include "fork_action.hpp"
 #include "string_constants.hpp"
+#include "pm_serializable_t.hpp"
 
 /* Stage 0 - Client requests fork */
 
-class pm_cp_fork_action_t {
+class pm_cp_fork_action_t
+        : public pm_serializable_t {
     static inline
     const std::string prefix              {"C_REQ_FORK"};
 
@@ -17,7 +19,7 @@ class pm_cp_fork_action_t {
     const std::regex  reg                 {prefix + s_ws + sr_ui + s_ws + sr_ui}; /* "C_REQ_FORK <fork-id> <fork-action>" */
 public:
     static bool       match               (std::string_view msg) { return std::regex_match(msg.data(), reg); }
-    std::string       serialize           () const {return {prefix + s_ws + std::to_string(fork_id) + s_ws + std::to_string((int)fork_action)}; }
+    std::string       serialize           () const override {return {prefix + s_ws + std::to_string(fork_id) + s_ws + std::to_string((int)fork_action)}; }
                       pm_cp_fork_action_t (std::string_view);
                       pm_cp_fork_action_t () = default;
 
@@ -25,7 +27,7 @@ public:
     fork_action_t     fork_action;
 };
 
-pm_cp_fork_action_t::pm_cp_fork_action_t(std::string_view sv) {
+inline pm_cp_fork_action_t::pm_cp_fork_action_t(std::string_view sv) {
     using namespace std;
 
     cmatch buf;

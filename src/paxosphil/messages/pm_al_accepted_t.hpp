@@ -7,21 +7,23 @@
 #include <regex>
 #include "verdict_t.hpp"
 #include "string_constants.hpp"
+#include "pm_serializable_t.hpp"
 
-class pm_al_accepted_t {
+class pm_al_accepted_t
+        : public pm_serializable_t {
     static inline
     const std::string   prefix          {"A_ACCEPTED"};
 
     /* "A_ACCEPTED <fork-id> <n-prepare> <client-port> <verdict>" */
     static inline
-    const std::regex    reg             { prefix           /* "A_ACCEPTED"      */
+    const std::regex    reg             { prefix           /* "A_ACCEPTED"     */
                                           + s_ws + sr_ui   /* " <fork-id>"     */
                                           + s_ws + sr_ui   /* " <n-prepare>"   */
                                           + s_ws + sr_ui   /* " <client-port>" */
                                           + s_ws + sr_ui}; /* " <verdict>"     */
 public:
     static bool         match           (std::string_view msg) {return std::regex_match(msg.data(), reg); }
-    std::string         serialize       () const;
+    std::string         serialize       () const override;
                         pm_al_accepted_t(std::string_view);
                         pm_al_accepted_t() = default;
 
@@ -35,7 +37,7 @@ public:
  *                                    Impl                                     *
  * --------------------------------------------------------------------------- */
 
-std::string pm_al_accepted_t::serialize() const {
+inline std::string pm_al_accepted_t::serialize() const {
     using namespace std;
 
     return {prefix
@@ -45,7 +47,7 @@ std::string pm_al_accepted_t::serialize() const {
         + s_ws + to_string((int)verdict)};
 }
 
-pm_al_accepted_t::pm_al_accepted_t(std::string_view msg) {
+inline pm_al_accepted_t::pm_al_accepted_t(std::string_view msg) {
     using namespace std;
 
     cmatch buf;

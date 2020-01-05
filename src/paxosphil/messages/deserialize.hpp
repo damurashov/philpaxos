@@ -40,7 +40,7 @@ std::variant<std::monostate, MessageTypes...> deserialize_impl(std::string_view 
 
 
 /* Foresees usage of all paxos messages */
-auto deserialize(std::string_view msg) {
+inline auto deserialize(std::string_view msg) {
     return deserialize_impl<pm_cp_fork_action_t
             , pm_pc_key_t
             , pm_pa_prepare_t
@@ -50,7 +50,7 @@ auto deserialize(std::string_view msg) {
             , pm_lc_verdict_t>(msg);
 }
 
-auto deserialize(const std::string& s) {
+inline auto deserialize(const std::string& s) {
     return deserialize(std::string_view(s.data()));
 }
 

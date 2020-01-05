@@ -41,3 +41,6 @@ target_link_libraries(hl3_test_local_udp_server hl3 gtest gtest_main pthread)
 
 add_executable(hl3_test_paxos_messages_serialization "test/paxosphil_srdr_messages.cpp")
 target_link_libraries(hl3_test_paxos_messages_serialization hl3 gtest gtest_main pthread)
+
+add_executable(hl3_test_paxos_nodes "test/paxos_nodes.cpp")
+target_link_libraries(hl3_test_paxos_nodes hl3 gtest gtest_main pthread)
