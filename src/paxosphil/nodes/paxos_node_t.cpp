@@ -1,14 +1,18 @@
 #include "paxos_node_t.hpp"
+#include <iostream>
 
-bool paxos_node_t::send(const pm_serializable_t& pm, auto... args) {
-    std::string serialized;
-    return send(std::string_view(serialized.data()), args...);
-}
+using namespace std;
 
-bool paxos_node_t::msend(const pm_serializable_t& pm, auto ... args) {
-    std::string serialized;
-    return msend(std::string_view(serialized.data()), args...);
-}
+
+//bool paxos_node_t::send(const pm_serializable_t& pm, const address_t& a, auto... args) {
+//    std::string serialized;
+//    return send(std::string_view(serialized.data()), a, args...);
+//}
+//
+//bool paxos_node_t::msend(const pm_serializable_t& pm, auto ... args) {
+//    std::string serialized;
+//    return msend(std::string_view(serialized.data()), args...);
+//}
 
 bool paxos_node_t::broadcast(std::string_view msg) {
     struct bcaller_t {

@@ -4,6 +4,7 @@
 #include <variant>
 #include <string_view>
 #include <string>
+#include <optional>
 #include "messages_all.hpp"
 
 template <typename ... MessageTypes>
@@ -52,6 +53,21 @@ inline auto deserialize(std::string_view msg) {
 
 inline auto deserialize(const std::string& s) {
     return deserialize(std::string_view(s.data()));
+}
+
+template <typename T>
+inline std::optional<T> deserialize_as(std::string_view msg) {
+    auto des{deserialize(msg)};
+    if (std::holds_alternative<T>(des)) {
+        return des;
+    } else {
+        return {};
+    }
+}
+
+template <typename T>
+inline std::optional<T> deserialize_as(const std::string& msg) {
+    return deserialize_as<T>(msg.data());
 }
 
 #endif /* DESERIALIZER_HPP */

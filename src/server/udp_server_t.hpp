@@ -4,6 +4,7 @@
 #include "server_t.hpp"
 //#include "../transmission/all.h"
 #include <string_view>
+#include <iostream>
 
 class udp_server_t
         : public ::server_t {
@@ -19,7 +20,9 @@ protected:
     udp_messenger_t&    messenger                  () {return m_messenger; }
 
     inline auto         receive                    (auto... args) {return m_messenger.receive(args...); } /* Wrapper for messenger::receive */
-    inline bool         send                       (std::string_view msg, auto... args) {return m_messenger.send (msg, args...); }    /* Wrapper for messenger::send */
+    inline bool         send                       (std::string_view msg,
+                                                    const address_t& addr,
+                                                    auto... args) { return m_messenger.send (msg, addr, args...); }    /* Wrapper for messenger::send */
     inline bool         msend                      (std::string_view msg, auto... args) {return m_messenger.msend(msg, args...); }   /* Wrapper for messenger::msend */
 
 public:
@@ -27,6 +30,7 @@ public:
     const address_t&    address                    () override {return m_address; }
     inline              operator const address_t&  () override {return address(); }
                         udp_server_t               () = delete;
+    virtual             ~udp_server_t              () {}
                         udp_server_t               ( const ip4_address_t& a )
                                                    : m_address(a)
                                                    , m_socket(a)

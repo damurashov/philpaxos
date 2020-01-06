@@ -2,6 +2,9 @@ cmake_minimum_required (VERSION 2.6)
 set(CMAKE_CXX_STANDARD 17)
 
 
+
+
+
 # Project 
 
 project (hl3_d)
@@ -9,6 +12,9 @@ include_directories(src)
 file(GLOB_RECURSE SRCS "src/*.cpp" "src/*.hpp" "src/*.h" "src/*.c")
 #add_executable(hl3 ${SRCS})
 add_library(hl3 ${SRCS})
+
+
+
 
 
 # Tests
@@ -42,5 +48,22 @@ target_link_libraries(hl3_test_local_udp_server hl3 gtest gtest_main pthread)
 add_executable(hl3_test_paxos_messages_serialization "test/paxosphil_srdr_messages.cpp")
 target_link_libraries(hl3_test_paxos_messages_serialization hl3 gtest gtest_main pthread)
 
-add_executable(hl3_test_paxos_nodes "test/paxos_nodes.cpp")
-target_link_libraries(hl3_test_paxos_nodes hl3 gtest gtest_main pthread)
+add_executable(hl3_test_paxos_messages_transmission "test/paxos_messages_transmission.cpp")
+target_link_libraries(hl3_test_paxos_messages_transmission hl3 gtest gtest_main pthread)
+
+#add_executable(hl3_test_paxos_nodes "test/paxos_nodes.cpp")
+#target_link_libraries(hl3_test_paxos_nodes hl3 gtest gtest_main pthread)
+
+
+
+
+
+# Prototypes 
+
+project(hl3_prototypes)
+include_directories(src)
+
+add_executable(hl3_mock_philosopher "test_pndemos/pn_mock_phil_t.cpp")
+target_link_libraries(hl3_mock_philosopher hl3)
+
+
