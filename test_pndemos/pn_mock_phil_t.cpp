@@ -24,7 +24,7 @@ void pn_mock_phil_t::perform() {
     pm_pc_key_t     from_proposer;
     pm_lc_verdict_t from_listener;
 
-    while (true) {
+    for(int i = 0; true; i %= 2) {
         auto [message, sender, flag] = receive();
         auto des {get<pm_cp_fork_action_t>(deserialize(message))};
         cout << message.data() << endl;
@@ -41,8 +41,13 @@ void pn_mock_phil_t::perform() {
         this_thread::sleep_for(500ms);
 //        cout << from_proposer.serialize() << endl; /* OK */
 
-        send(from_proposer, sender);
-        send(from_listener, sender);
+        if (i) {
+            send(from_listener, sender);
+            send(from_proposer, sender);
+        } else {
+            send(from_proposer, sender);
+            send(from_listener, sender);
+        }
     }
 }
 
