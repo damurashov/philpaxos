@@ -59,6 +59,11 @@ TEST_F(UdpSocketAddressWrappers, ctor_of_ip4_address_t) {
     EXPECT_EQ(data3->sin_port, ntohs(123));
 }
 
+TEST_F(UdpSocketAddressWrappers, port_acquisition) {
+    ip4_address_t addr(123);
+    EXPECT_EQ(addr.port(), 123);
+}
+
 TEST_F(UdpSocketAddressWrappers, constant_length_message_sending) {
     mSocketPeerSource.bind(ip4_address_t("127.0.0.1", PeerSourcePort));
     mSocketPeerSink.bind(mAddrPeerSink);

@@ -16,3 +16,8 @@ ip4_address_t::ip4_address_t(string_view hostname, int port) {
 ip4_address_t::ip4_address_t(const sockaddr_in& address) {
     m_address = *(reinterpret_cast<const sockaddr*>(&address));
 }
+
+int ip4_address_t::port() const {
+    const sockaddr_in& address = *(reinterpret_cast<const sockaddr_in*>(&m_address));
+    return ntohs(address.sin_port);
+}

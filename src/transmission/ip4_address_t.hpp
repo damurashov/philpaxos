@@ -10,9 +10,11 @@ class ip4_address_t
 
 public:
     using address_t::address_t;
-    ip4_address_t(std::string_view host_ip4, int port);
-    ip4_address_t(int port) : ip4_address_t("127.0.0.1", port) {}
-    ip4_address_t(const sockaddr_in& addr);
+    int     port           () const;
+            ip4_address_t  (std::string_view host_ip4, int port);
+            ip4_address_t  (int port) : ip4_address_t("127.0.0.1", port) {}
+            ip4_address_t  (const sockaddr_in& addr);
+    virtual ~ip4_address_t () {}
 };
 
 #endif /* IP4_ADDRESS_T_HPP */

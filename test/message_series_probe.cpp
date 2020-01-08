@@ -138,3 +138,18 @@ TEST_F(UdpMessageSeriesProbe, line_ab) {
         ASSERT_TRUE(messenger.send(msg_to_send, nodes[0].second));
     }
 }
+
+TEST_F(UdpMessageSeriesProbe, sender_port_acquisition) {
+    message_buffer_t buf;
+    int port_sender = 6003;
+    udp_socket_t socket1(port_sender-1);
+    udp_socket_t socket2(port_sender);
+    if (fork() != 0) { /* Parent process, here */
+        udp_messenger_t msgr(socket1, buf);
+        auto [message, sender, flag] = msgr.receive();
+        EXPECT_EQ(static_cast<ip4_address_t&>(sender).port(), port_sender);
+    } else {
+        udp_messenger_t msgr(socket2, buf);
+        msgr.send("Hello", ip4_address_t(port_sender));
+    }
+}
