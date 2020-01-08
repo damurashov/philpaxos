@@ -81,6 +81,8 @@ TEST(PaxosPhilMessageSerialization, pm_pa_prepare_t) {
 TEST(PaxosPhilMessageSerialization, pm_ap_promise_t) {
     pm_ap_promise_t promise_nack;
     promise_nack.promise_type = promise_type_t::nack;
+    promise_nack.fork_id = 7;
+    promise_nack.n_prep_fork_id = 20;
 
     pm_ap_promise_t promise;
     promise.promise_type = promise_type_t::promise;
@@ -91,14 +93,15 @@ TEST(PaxosPhilMessageSerialization, pm_ap_promise_t) {
     promise_value.promise_type = promise_type_t::promise_have_value;
     promise_value.fork_id = 3;
     promise_value.n_prep_fork_id = 4;
+    promise_value.n_prep_fork_id_old = 40;
     promise_value.fork_action = fork_action_t::take; /* 0 */
 
     auto serialized_nack {promise_nack.serialize()};
     auto serialized      {promise.serialize()};
     auto serialized_value{promise_value.serialize()};
-    EXPECT_STREQ(serialized_nack.data(), "A_PROMISE NACK");
+    EXPECT_STREQ(serialized_nack.data(), "A_PROMISE NACK 7 20");
     EXPECT_STREQ(serialized.data(), "A_PROMISE 4 2");
-    EXPECT_STREQ(serialized_value.data(), "A_PROMISE 3 4 0");
+    EXPECT_STREQ(serialized_value.data(), "A_PROMISE 3 4 40 0");
 
     auto deserialized_nack {deserialize(serialized_nack)};
     auto deserialized      {deserialize(serialized)};
@@ -117,13 +120,16 @@ TEST(PaxosPhilMessageSerialization, pm_ap_promise_t) {
     EXPECT_EQ(     pr.promise_type, promise_type_t::promise);
     EXPECT_EQ(prvalue.promise_type, promise_type_t::promise_have_value);
 
+    EXPECT_EQ( prnack.fork_id, 7);
     EXPECT_EQ(     pr.fork_id, 4);
     EXPECT_EQ(prvalue.fork_id, 3);
 
-    EXPECT_EQ(     pr.n_prep_fork_id,2);
-    EXPECT_EQ(prvalue.n_prep_fork_id,4);
+    EXPECT_EQ( prnack.n_prep_fork_id, 20);
+    EXPECT_EQ(     pr.n_prep_fork_id, 2 );
+    EXPECT_EQ(prvalue.n_prep_fork_id, 4 );
 
-    EXPECT_EQ(prvalue.fork_action, fork_action_t::take);
+    EXPECT_EQ(prvalue.n_prep_fork_id_old, 40);
+    EXPECT_EQ(prvalue.fork_action       , fork_action_t::take);
 }
 
 TEST(PaxosPhilMessageSerialization, pm_pa_accept_t) {

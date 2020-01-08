@@ -22,14 +22,23 @@ class pm_ap_promise_t
     static inline
     const std::string nack                   {"NACK"};
 
-    static inline
-    const std::regex  reg_nack               {prefix + s_ws + nack};
+    static inline                            /* "A_PROMISE NACK <fork-id> <n-prepare>"                          */
+    const std::regex  reg_nack               {prefix
+                                              + s_ws + nack
+                                              + s_ws + sr_ui
+                                              + s_ws + sr_ui};
 
-    static inline                            /* "A_PROMISE <fork-id> <n-prepare>"               */
-    const std::regex  reg_promise            {prefix + s_ws + sr_ui + s_ws + sr_ui};
+    static inline                            /* "A_PROMISE <fork-id> <n-prepare>"                               */
+    const std::regex  reg_promise            {prefix
+                                              + s_ws + sr_ui
+                                              + s_ws + sr_ui};
 
-    static inline                            /* "A_PROMISE <fork-id> <n-prepare> <fork-action>" */
-    const std::regex  reg_promise_have_value {prefix + s_ws + sr_ui + s_ws + sr_ui + s_ws + sr_ui};
+    static inline                            /* "A_PROMISE <fork-id> <n-prepare> <n-prepare-old> <fork-action>" */
+    const std::regex  reg_promise_have_value {prefix
+                                              + s_ws + sr_ui
+                                              + s_ws + sr_ui
+                                              + s_ws + sr_ui
+                                              + s_ws + sr_ui};
 public:
     static bool       match                  (std::string_view);
     std::string       serialize              () const override;
@@ -37,8 +46,9 @@ public:
                       pm_ap_promise_t        () = default;
 
     promise_type_t    promise_type;
-    int               fork_id;
-    int               n_prep_fork_id;        /* N */
+    int               fork_id;               /* Part of the key */
+    int               n_prep_fork_id;        /* Part of the key */
+    int               n_prep_fork_id_old;    /* N */
     fork_action_t     fork_action;           /* V */
 
 };
