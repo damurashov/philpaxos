@@ -1,11 +1,12 @@
 #include "pn_proposer_t.hpp"
 #include "../parameters.hpp"
+#include "utility/call_on_destruct_t.hpp"
 #include <utility>
 #include <iostream>
+#include <initializer_list>
 
 using namespace std;
 using namespace chrono_literals;
-
 
 /* --------------------------------------------------------------------------- *
  *                                 Non-members                                 *
@@ -160,7 +161,19 @@ void pn_proposer_t::handle_ap(pm_ap_promise_t& promise, address_t& acceptor) {
 }
 
 void pn_proposer_t::process_handled_ap(int fork_id, int n_prep_fork_id) {
-    auto notify([&] {m_f_one_thread_done.notify_all();});
+//    auto notify{[&] {m_f_one_thread_done.notify_all();}};
+//    auto erase_from_index {[&]() {
+//        if (auto it {m_set_fork_nprep.find({fork_id, n_prep_fork_id})}; it != m_set_fork_nprep.end()) {
+//            m_set_fork_nprep.erase(it);
+//        }
+//    }};
+    auto call_on_exit {call_on_destruct_t {[&]() {
+        m_f_one_thread_done.notify_all(); /* notify */
+        /* Erase from index */
+        if (auto it {m_set_fork_nprep.find({fork_id, n_prep_fork_id})}; it != m_set_fork_nprep.end()) {
+            m_set_fork_nprep.erase(it);
+        }
+    }}};
 
     //cout << "process_handled_ap, started handler thread" << endl;
     this_thread::sleep_for(timeout_wait_promises);
@@ -174,7 +187,7 @@ void pn_proposer_t::process_handled_ap(int fork_id, int n_prep_fork_id) {
         if (!have_quorum(fork_id)
                 || m_map_fork_nprep[fork_id] != n_prep_fork_id) {
 //            cout << "Got no quorum" << endl;
-            notify();
+//            notify();
             return;
         }
         /* If there are promises with promise_type_t::nack,
@@ -182,19 +195,19 @@ void pn_proposer_t::process_handled_ap(int fork_id, int n_prep_fork_id) {
          * be aborted. */
         for (auto & promise : m_map_fork_promise[fork_id]) {
             if (promise.promise_type == promise_type_t::nack) {
-                notify();
+//                notify();
                 return;
             }
         }
 
 //        for (auto accept{create_msg_accept(fork_id)}; !broadcast(accept); ) {} /* TODO: WRONG!  */
         for (auto accept{create_msg_accept(fork_id)}; !msend(accept, m_map_fork_addrquorum[fork_id]); ) {}
-        if (auto it {m_set_fork_nprep.find({fork_id, n_prep_fork_id})}; it != m_set_fork_nprep.end()) {
-            m_set_fork_nprep.erase(it);
-        }
+//        if (auto it {m_set_fork_nprep.find({fork_id, n_prep_fork_id})}; it != m_set_fork_nprep.end()) {
+//            m_set_fork_nprep.erase(it);
+//        }
     }
 
-    notify();
+//    notify();
     //cout << "End of handler" << endl;
 }
 
