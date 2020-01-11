@@ -56,7 +56,7 @@ public:
  * --------------------------------------------------------------------------- */
 
 template <typename Rep, typename Period>
-void socket_t::set_timeout(timeout_type_t ttype, std::chrono::duration<Rep, Period> timeout) {
+inline void socket_t::set_timeout(timeout_type_t ttype, std::chrono::duration<Rep, Period> timeout) {
     using namespace std;
     using namespace chrono_literals;
     using namespace ::std::chrono;

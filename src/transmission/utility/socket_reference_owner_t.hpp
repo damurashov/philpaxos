@@ -17,6 +17,7 @@ protected:
 
 public:
     socket_reference_owner_t(socket_t& socket) : m_socket(socket) {}
+    virtual ~socket_reference_owner_t() {}
 
 };
 

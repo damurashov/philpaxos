@@ -19,7 +19,7 @@ public:
 protected:
     std::tuple<
      std::string_view,
-     address_t, bool>  perform_receive () override;
+     address_t, bool>  perform_receive (int flags = receive_flag_t::no_flags) override;
 };
 
 

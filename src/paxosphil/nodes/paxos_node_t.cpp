@@ -1,5 +1,6 @@
 #include "paxos_node_t.hpp"
 #include <iostream>
+#include "utility/caller_t.hpp"
 
 using namespace std;
 
@@ -31,4 +32,13 @@ bool paxos_node_t::broadcast(std::string_view msg) {
 bool paxos_node_t::broadcast(const pm_serializable_t& msg) {
     std::string serialized{msg.serialize()};
     return broadcast(std::string_view(serialized.data()));
+}
+
+const int paxos_node_t::size_address_pool() const {
+    caller_t get_size {
+        [&](const ip4_address_t&)                -> int {return 1;        },
+        [&](const std::vector<ip4_address_t>& p) -> int {return p.size(); },
+        [&](auto)                                -> int {return 0;        }
+    };
+    return std::visit(get_size, m_address_pool);
 }

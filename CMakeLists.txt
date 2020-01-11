@@ -12,6 +12,7 @@ include_directories(src)
 file(GLOB_RECURSE SRCS "src/*.cpp" "src/*.hpp" "src/*.h" "src/*.c")
 #add_executable(hl3 ${SRCS})
 add_library(hl3 ${SRCS})
+target_link_libraries(hl3 pthread)
 
 
 
@@ -58,12 +59,13 @@ target_link_libraries(hl3_test_paxos_messages_transmission hl3 gtest gtest_main 
 
 
 
-# Prototypes 
+# Demonstrations 
 
 project(hl3_prototypes)
 include_directories(src)
 
-add_executable(hl3_mock_philosopher "test_pndemos/pn_mock_phil_t.cpp")
+add_executable(hl3_mock_philosopher "test_pndemos/mock4philosopher.cpp")
 target_link_libraries(hl3_mock_philosopher hl3)
 
-
+add_executable(hl3_mock_proposer "test_pndemos/mock4proposer.cpp")
+target_link_libraries(hl3_mock_proposer hl3)

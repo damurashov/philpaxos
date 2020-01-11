@@ -3,14 +3,15 @@
 
 using namespace std;
 
-tuple<string_view, address_t, bool> udp_receiver_t::perform_receive()  {
+tuple<string_view, address_t, bool> udp_receiver_t::perform_receive(int flags)  {
     m_buf.clear();
     sockaddr address;
     auto addrsize = sizeof(address);
     int n_recv = recvfrom((int)socket()
             , (char*) m_buf
             , (int) m_buf
-            , 0
+            , flags
+//            , 0
 //            , MSG_DONTWAIT
             , &address
             , (socklen_t*)&addrsize);

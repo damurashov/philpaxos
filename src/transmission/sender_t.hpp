@@ -29,7 +29,7 @@ public:
  *                           Templated members impl.                           *
  * --------------------------------------------------------------------------- */
 
-bool sender_t::msend(std::string_view msg, const auto& container) {
+inline bool sender_t::msend(std::string_view msg, const auto& container) {
     bool f = true;
     for (const auto& addr : container) {
         f &= perform_send(msg, addr);
@@ -38,7 +38,7 @@ bool sender_t::msend(std::string_view msg, const auto& container) {
 }
 
 template <typename Rep, typename Period>
-bool sender_t::send(std::chrono::duration<Rep, Period> timeout, std::string_view message, const address_t& recipient) {
+inline bool sender_t::send(std::chrono::duration<Rep, Period> timeout, std::string_view message, const address_t& recipient) {
     socket().set_timeout(timeout_type_t::timeout_wait_send, timeout);
     bool f_sent = send(message, recipient);
     socket().set_timeout(timeout_type_t::timeout_wait_send);

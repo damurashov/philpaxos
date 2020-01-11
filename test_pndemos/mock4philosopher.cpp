@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class pn_mock_phil_t
+class pn_mock_proposer_listener_t
         : public paxos_node_t {
 
 private:
@@ -20,7 +20,7 @@ public:
 
 };
 
-void pn_mock_phil_t::perform() {
+void pn_mock_proposer_listener_t::perform() {
     pm_pc_key_t     from_proposer;
     pm_lc_verdict_t from_listener;
 
@@ -38,7 +38,6 @@ void pn_mock_phil_t::perform() {
         from_listener.n_prep_fork_id = 222;
         from_listener.verdict        = verdict_t::approved;
 
-        this_thread::sleep_for(500ms);
 //        cout << from_proposer.serialize() << endl; /* OK */
 
         if (i) {
@@ -48,13 +47,14 @@ void pn_mock_phil_t::perform() {
             send(from_proposer, sender);
             send(from_listener, sender);
         }
+        this_thread::sleep_for(500ms);
     }
 }
 
 
 int main(void) {
     pn_phil_t       phil(1,2,6003, 6004);
-    pn_mock_phil_t  mock_phil(6004, 6003);
+    pn_mock_proposer_listener_t  mock_phil(6004, 6003);
     phil.run(server_mode_t::process);
     mock_phil.run(server_mode_t::this_thread);
 }
