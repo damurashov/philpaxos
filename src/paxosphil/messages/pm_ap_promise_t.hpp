@@ -19,9 +19,11 @@ class pm_ap_promise_t
     static inline
     const std::string prefix                 {"A_PROMISE"};
 
+//    [[deprecated]]
     static inline
     const std::string nack                   {"NACK"};
 
+//    [[deprecated]]
     static inline                            /* "A_PROMISE NACK <fork-id> <n-prepare>"                          */
     const std::regex  reg_nack               {prefix
                                               + s_ws + nack

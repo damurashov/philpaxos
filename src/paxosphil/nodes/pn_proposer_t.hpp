@@ -68,7 +68,7 @@ protected:
 public:
                              pn_proposer_t           (const ip4_address_t& this_address,
                                                       const std::vector<ip4_address_t>& acceptors_addresses)
-                                                  : paxos_node_t(this_address, acceptors_addresses) {}
+                                                      : paxos_node_t(this_address, acceptors_addresses) {}
     virtual                  ~pn_proposer_t          ();
 
 };

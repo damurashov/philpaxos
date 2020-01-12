@@ -9,10 +9,21 @@ set(CMAKE_CXX_STANDARD 17)
 
 project (hl3_d)
 include_directories(src)
-file(GLOB_RECURSE SRCS "src/*.cpp" "src/*.hpp" "src/*.h" "src/*.c")
-#add_executable(hl3 ${SRCS})
-add_library(hl3 ${SRCS})
-target_link_libraries(hl3 pthread)
+
+file(GLOB_RECURSE SRCS_TRANSMISSION "src/transmission/*.cpp" "src/transmission/*.hpp" "src/transmission/*.h" "src/transmission/*.c")
+add_library(hl3_transmission ${SRCS_TRANSMISSION})
+
+file(GLOB_RECURSE SRCS_SERVER "src/server/*.cpp" "src/server/*.hpp" "src/server/*.h" "src/server/*.c")
+add_library(hl3_server ${SRCS_SERVER})
+target_link_libraries(hl3_server hl3_transmission)
+
+file(GLOB_RECURSE SRCS_PAXOSPHIL "src/paxosphil/*.cpp" "src/paxosphil/*.hpp" "src/paxosphil/*.h" "src/paxosphil/*.c")
+add_library(hl3 ${SRCS_PAXOSPHIL})
+target_link_libraries(hl3 hl3_server hl3_transmission pthread)
+
+#file(GLOB_RECURSE SRCS "src/*.cpp" "src/*.hpp" "src/*.h" "src/*.c")
+#add_library(hl3 ${SRCS})
+#target_link_libraries(hl3 pthread)
 
 
 
@@ -69,3 +80,6 @@ target_link_libraries(hl3_mock_philosopher hl3)
 
 add_executable(hl3_mock_proposer "test_pndemos/mock4proposer.cpp")
 target_link_libraries(hl3_mock_proposer hl3)
+
+add_executable(hl3_mock_acceptor "test_pndemos/mock4acceptor.cpp")
+target_link_libraries(hl3_mock_acceptor hl3)
