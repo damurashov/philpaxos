@@ -55,6 +55,10 @@ void pn_mock_proposer_listener_t::perform() {
 int main(void) {
     pn_phil_t       phil(1,2,6003, 6004);
     pn_mock_proposer_listener_t  mock_phil(6004, 6003);
+    log_udp_server_t logger(6005);
+    phil.set_logger(logger);
+    phil.set_logging(true);
     phil.run(server_mode_t::process);
-    mock_phil.run(server_mode_t::this_thread);
+    mock_phil.run(server_mode_t::process);
+    logger.run(server_mode_t::this_thread);
 }

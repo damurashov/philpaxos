@@ -90,24 +90,28 @@ void pn_phil_t::take_first_fork() {
     while (!perform_stage(m_id_first_fork, fork_action_t::take)) {
         this_thread::sleep_for(timeout_philosopher_if_denied);
     }
+    log(string("Phil #") + to_string(m_id_first_fork) + string(" took #") + to_string(m_id_first_fork));
 }
 
 void pn_phil_t::take_second_fork() {
     while (!perform_stage(m_id_second_fork, fork_action_t::take)) {
         this_thread::sleep_for(timeout_philosopher_if_denied);
     }
+    log(string() + "Phil #" + to_string(m_id_first_fork) + " took #" + to_string(m_id_second_fork));
 }
 
 void pn_phil_t::put_first_fork(){
     while (!perform_stage(m_id_first_fork, fork_action_t::put)) {
         this_thread::sleep_for(timeout_philosopher_if_denied);
     }
+    log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_first_fork));
 }
 
 void pn_phil_t::put_second_fork(){
     while (!perform_stage(m_id_second_fork, fork_action_t::put)) {
         this_thread::sleep_for(timeout_philosopher_if_denied);
     }
+    log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_second_fork));
 }
 
 /* --------------------------------------------------------------------------- *
