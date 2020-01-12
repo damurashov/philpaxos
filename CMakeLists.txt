@@ -83,3 +83,10 @@ target_link_libraries(hl3_mock_proposer hl3)
 
 add_executable(hl3_mock_acceptor "test_pndemos/mock4acceptor.cpp")
 target_link_libraries(hl3_mock_acceptor hl3)
+
+add_executable(hl3_mock_listener "test_pndemos/mock4listener.cpp")
+target_link_libraries(hl3_mock_listener hl3)
+
+
+
+#

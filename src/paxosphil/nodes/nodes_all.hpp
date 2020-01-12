@@ -5,5 +5,6 @@
 #include "pn_phil_t.hpp"
 #include "pn_proposer_t.hpp"
 #include "pn_acceptor_t.hpp"
+#include "pn_listener_t.hpp"
 
 #endif /* PAXOS_NODES_ALL_HPP */
