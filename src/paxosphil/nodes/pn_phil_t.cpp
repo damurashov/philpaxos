@@ -27,6 +27,7 @@ bool pn_phil_t::send_request(int fork_id, fork_action_t action) {
         return false;
     }
     return true;
+    log(string() + " Phil #" + to_string(m_id_first_fork) + " requested #" + to_string(fork_id));
 }
 
 
@@ -98,12 +99,14 @@ void pn_phil_t::take_second_fork() {
         this_thread::sleep_for(timeout_philosopher_if_denied);
     }
     log(string() + "Phil #" + to_string(m_id_first_fork) + " took #" + to_string(m_id_second_fork));
+    log(string() + "second fork");
 }
 
 void pn_phil_t::put_first_fork(){
     while (!perform_stage(m_id_first_fork, fork_action_t::put)) {
         this_thread::sleep_for(timeout_philosopher_if_denied);
     }
+    log(string() + "put fork");
     log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_first_fork));
 }
 
@@ -111,6 +114,7 @@ void pn_phil_t::put_second_fork(){
     while (!perform_stage(m_id_second_fork, fork_action_t::put)) {
         this_thread::sleep_for(timeout_philosopher_if_denied);
     }
+    log(string() + "put fork");
     log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_second_fork));
 }
 
@@ -119,7 +123,7 @@ void pn_phil_t::put_second_fork(){
  * --------------------------------------------------------------------------- */
 
 void pn_phil_t::perform() {
-
+    log(string() + "Phil #" + to_string(m_id_first_fork) + " here");
 //    cout << "Hello from philosopher" << endl;
     while (true) {
         take_first_fork();

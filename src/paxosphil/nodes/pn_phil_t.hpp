@@ -2,13 +2,15 @@
 #define PN_PHIL_T_HPP
 
 #include "paxos_node_t.hpp"
+#include "utility/identifiable_t.hpp"
 #include <utility>
 #include <string_view>
 #include <optional>
 #include <tuple>
 
 class pn_phil_t
-        : public paxos_node_t {
+        : public paxos_node_t
+        , public identifiable_t<pn_phil_t> {
 
 private:
 

@@ -25,6 +25,8 @@ target_link_libraries(hl3 hl3_server hl3_transmission pthread)
 #add_library(hl3 ${SRCS})
 #target_link_libraries(hl3 pthread)
 
+add_executable(hl3_RUN "src/main.cpp")
+target_link_libraries(hl3_RUN hl3)
 
 
 
