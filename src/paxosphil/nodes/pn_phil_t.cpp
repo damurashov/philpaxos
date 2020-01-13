@@ -76,8 +76,10 @@ bool pn_phil_t::perform_stage(int fork_id, fork_action_t action) {
             if (result.second) {
                 break;
             }
+            phideblog(m_name, "no response");
 //            slog(m_name, "no response");
         }
+        else phideblog(m_name, "no send");
 //        slog(m_name, "no send");
         this_thread::sleep_for(timeout_philosopher_if_no_send_receive);
     }
@@ -132,7 +134,7 @@ void pn_phil_t::put_second_fork(){
 
 void pn_phil_t::perform() {
     philog(m_name, "here");
-
+    phideblog(m_name, "run");
     while (true) {
         take_first_fork();
         take_second_fork();

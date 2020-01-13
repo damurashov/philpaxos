@@ -21,11 +21,12 @@ void __paxos_logging_stub__(auto...) {}
  * <empty>                  Regular log
  */
 
-#define phircvlog off /* rcv */
+#define phircvlog off
 #define accrcvlog off
 #define prorcvlog off
 #define lisrcvlog off
-#define prodeblog off /* deb */
-#define philog    on  /* <empty> */
+#define prodeblog off
+#define phideblog off
+#define philog    on
 
 #endif /* PAXOS_NODE_LOG_DEFS_HPP */

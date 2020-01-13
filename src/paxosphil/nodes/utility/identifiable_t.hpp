@@ -2,7 +2,7 @@
 #define IDENTIFIABLE_T_HPP
 
 /* Mix-in class intended to decorate some class with an ability to provide an ID acquisition. */
-template <class T, size_t CountFrom=1>
+template <class T, int CountFrom=1>
 class identifiable_t {
     inline static int id_bound = CountFrom;
     const int m_id = id_bound++;
