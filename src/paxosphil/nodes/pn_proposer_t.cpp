@@ -4,6 +4,7 @@
 #include <utility>
 #include <iostream>
 #include <initializer_list>
+#include "utility/logdefs.hpp"
 
 using namespace std;
 using namespace chrono_literals;
@@ -37,6 +38,8 @@ void pn_proposer_t::perform() {
 
         if (flag) {
             //cout << message.data() << endl;
+//            slog("Prop", "got #", message.data());
+            prorcvlog("Prop", message.data());
             handle(deserialize(message), sender);
         }
     }

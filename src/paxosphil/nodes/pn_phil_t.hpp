@@ -7,16 +7,18 @@
 #include <string_view>
 #include <optional>
 #include <tuple>
+#include <string>
 
 class pn_phil_t
         : public paxos_node_t
-        , public identifiable_t<pn_phil_t> {
+        , public identifiable_t<pn_phil_t,1> {
 
 private:
 
 //    const int           m_this_id;
     const int           m_id_first_fork;
     const int           m_id_second_fork;
+    const std::string   m_name              {std::string("Phil #") + std::to_string(id())};
 
     bool                send_request        (int fork_id, fork_action_t);
 

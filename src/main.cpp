@@ -26,16 +26,17 @@ int main(void) {
     pn_phil_t        phil4(1,4,6009,6005);
     log_udp_server_t logs(6010);
 
-    enable_logging(logs, phil1, phil2, phil3, phil4);
+    enable_logging(logs, phil1, phil2, phil3, phil4, prop);
     run_servers(server_mode_t::process,
             lear,
             acc1,
-            acc2,
-            acc3,
+//            acc2,
+//            acc3,
             prop,
-            phil1,
-            phil2,
-            phil3,
-            phil4);
+            phil1
+//            phil2,
+//            phil3,
+//            phil4
+            );
     logs.run(server_mode_t::this_thread);
 }

@@ -8,6 +8,7 @@ void pn_acceptor_t::perform() {
     while (true) {
         auto [message, sender, flag] = receive();
         if (flag) {
+            accrcvlog("Acceptor:", message.data());
             handle(deserialize(message), sender);
         }
     }
@@ -72,6 +73,8 @@ pm_ap_promise_t pn_acceptor_t::create_msg_promise(const pm_pa_prepare_t& mprepar
     } else  {
         promise.promise_type = promise_type_t::promise_have_value;
         promise.fork_action = m_map_fork_faction.at(mprepare.fork_id);
+        promise.n_prep_fork_id_old = m_map_fork_nprepaccept.at(mprepare.fork_id);
+//        promise.n_prep_fork_id_old = m_map_fork_
     }
 
     return promise;

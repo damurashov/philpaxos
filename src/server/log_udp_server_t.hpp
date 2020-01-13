@@ -4,6 +4,7 @@
 #include "udp_server_t.hpp"
 #include <chrono>
 #include <iomanip>
+#include <sstream>
 
 class log_udp_server_t
         : public udp_server_t {
@@ -20,8 +21,11 @@ protected:
             auto ms_remainder{duration_cast<milliseconds>(nowms-seconds(duration_cast<seconds>(nowms)))};
 
             auto time{chrono::system_clock::to_time_t(now)};
-            cout << put_time(localtime(&time), "%Y-%d-%m %H:%M:%S:") << ms_remainder.count()
-                    << "  " << message.data() << endl;
+            stringstream sstime;
+            sstime << put_time(localtime(&time), "%Y-%d-%m %H:%M:%S:") << ms_remainder.count();
+            cout << left << setw(30) << sstime.str() << message.data() << endl;
+//            cout << put_time(localtime(&time), "%Y-%d-%m %H:%M:%S:") << ms_remainder.count()
+//                    << "  " << message.data() << endl;
         }
     }
 

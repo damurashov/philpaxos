@@ -6,6 +6,7 @@
 #include <variant>
 #include <utility>
 #include <thread>
+#include "utility/logdefs.hpp"
 
 using namespace std;
 
@@ -27,7 +28,6 @@ bool pn_phil_t::send_request(int fork_id, fork_action_t action) {
         return false;
     }
     return true;
-    log(string() + " Phil #" + to_string(m_id_first_fork) + " requested #" + to_string(fork_id));
 }
 
 
@@ -54,13 +54,13 @@ pair<verdict_t, bool> pn_phil_t::receive_response(int fork_id) {
     for (int i = 0; (i < n_timeouts_philosopher) && (!check_done()); ++i) {
         auto [msg, sender, flag] = receive(timeout_philosopher);
         if (flag) {
+            phircvlog(m_name, msg.data());
             i = -1;
         }
         visit(caller, deserialize(msg));
     }
 
     if (check_done()) {
-//        cout << "Ok, got both results" << endl;
         return {resp_verd.verdict, true};
     }
     return {{},false}; /* No response has been acquired */
@@ -68,6 +68,7 @@ pair<verdict_t, bool> pn_phil_t::receive_response(int fork_id) {
 
 bool pn_phil_t::perform_stage(int fork_id, fork_action_t action) {
     pair<verdict_t, bool> result;
+    string saction {(action == fork_action_t::put ? "put" : "take") };
 
     while (true) {
         if (send_request(fork_id, action)) {
@@ -75,47 +76,50 @@ bool pn_phil_t::perform_stage(int fork_id, fork_action_t action) {
             if (result.second) {
                 break;
             }
-//            cout << "Got no response" << endl;
+//            slog(m_name, "no response");
         }
-//        cout << "Not sended" << endl;
+//        slog(m_name, "no send");
+        this_thread::sleep_for(timeout_philosopher_if_no_send_receive);
     }
 
     if (result.first == verdict_t::approved) {
+//        slog(m_name, "approved", saction, "#", fork_id);
         return true;
     } else {
+//        slog(m_name, "denied", saction, "#", fork_id);
         return false;
     }
 }
 
 void pn_phil_t::take_first_fork() {
     while (!perform_stage(m_id_first_fork, fork_action_t::take)) {
-        this_thread::sleep_for(timeout_philosopher_if_denied);
+        this_thread::sleep_for(timeout_philosopher_if_denied_take);
     }
-    log(string("Phil #") + to_string(m_id_first_fork) + string(" took #") + to_string(m_id_first_fork));
+//    log(string("Phil #") + to_string(m_id_first_fork) + string(" took #") + to_string(m_id_first_fork));
 }
 
 void pn_phil_t::take_second_fork() {
     while (!perform_stage(m_id_second_fork, fork_action_t::take)) {
-        this_thread::sleep_for(timeout_philosopher_if_denied);
+        this_thread::sleep_for(timeout_philosopher_if_denied_take);
     }
-    log(string() + "Phil #" + to_string(m_id_first_fork) + " took #" + to_string(m_id_second_fork));
-    log(string() + "second fork");
+//    log(string() + "Phil #" + to_string(m_id_first_fork) + " took #" + to_string(m_id_second_fork));
+//    log(string() + "second fork");
 }
 
 void pn_phil_t::put_first_fork(){
     while (!perform_stage(m_id_first_fork, fork_action_t::put)) {
-        this_thread::sleep_for(timeout_philosopher_if_denied);
+        this_thread::sleep_for(timeout_philosopher_if_denied_put);
     }
-    log(string() + "put fork");
-    log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_first_fork));
+//    log(string() + "put fork");
+//    log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_first_fork));
 }
 
 void pn_phil_t::put_second_fork(){
     while (!perform_stage(m_id_second_fork, fork_action_t::put)) {
-        this_thread::sleep_for(timeout_philosopher_if_denied);
+        this_thread::sleep_for(timeout_philosopher_if_denied_put);
     }
-    log(string() + "put fork");
-    log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_second_fork));
+//    log(string() + "put fork");
+//    log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_second_fork));
 }
 
 /* --------------------------------------------------------------------------- *
@@ -123,8 +127,8 @@ void pn_phil_t::put_second_fork(){
  * --------------------------------------------------------------------------- */
 
 void pn_phil_t::perform() {
-    log(string() + "Phil #" + to_string(m_id_first_fork) + " here");
-//    cout << "Hello from philosopher" << endl;
+//    log(string() + "Phil #" + to_string(m_id_first_fork) + " here");
+    slog(m_name, "here");
     while (true) {
         take_first_fork();
         take_second_fork();

@@ -1,5 +1,6 @@
 #include "pn_listener_t.hpp"
 #include <variant>
+#include "utility/logdefs.hpp"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ void pn_listener_t::perform() {
     while (true) {
         auto [message, sender, flag] = receive();
         if (flag) {
+            lisrcvlog("Lisr", message.data());
             auto pmvar{deserialize(message)};
             if (holds_alternative<pm_al_accepted_t>(pmvar)) {
                 handle_accepted(std::get<pm_al_accepted_t>(pmvar));

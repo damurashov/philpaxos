@@ -7,6 +7,7 @@
 #include "../messages/messages_all.hpp"
 #include <variant>
 #include "utility/caller_t.hpp"
+#include "utility/logdefs.hpp"
 
 class pn_acceptor_t
         : public paxos_node_t {

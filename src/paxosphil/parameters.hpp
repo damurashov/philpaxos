@@ -11,15 +11,23 @@
 const auto timeout_philosopher = std::chrono::milliseconds(1000);
 /* If a "philosopher's" request has been denied, it should wait for some time*/
 
-const auto timeout_philosopher_if_denied = std::chrono::milliseconds(600);
+const auto timeout_philosopher_if_denied = std::chrono::milliseconds(1600);
+/* N timeouts to wait for response (check result after every timeout) */
+
+const auto timeout_philosopher_if_denied_take = std::chrono::milliseconds(1600);
+/* N timeouts to wait for response (check result after every timeout) */
+
+const auto timeout_philosopher_if_denied_put = std::chrono::milliseconds(20);
 /* N timeouts to wait for response (check result after every timeout) */
 
 const int  n_timeouts_philosopher = 5;
 /* If a philosopher has passed all the stages, it should wait, that is how long. */
 
-const auto timeout_philosopher_after_cycle = std::chrono::milliseconds(300);
+const auto timeout_philosopher_after_cycle = std::chrono::milliseconds(2000);
 /* N attempts to send request and receive response */
-//const int  n_attempts_philosopher = 1;
+//const int  n_attempts_philosopher = 1;\
+
+const auto timeout_philosopher_if_no_send_receive = std::chrono::milliseconds(400);
 
 /* --------------------------------------------------------------------------- *
  *                                Proposer Node                                *
