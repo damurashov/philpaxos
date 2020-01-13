@@ -95,6 +95,7 @@ void pn_phil_t::take_first_fork() {
     while (!perform_stage(m_id_first_fork, fork_action_t::take)) {
         this_thread::sleep_for(timeout_philosopher_if_denied_take);
     }
+    philog(m_name, "took #", m_id_first_fork);
 //    log(string("Phil #") + to_string(m_id_first_fork) + string(" took #") + to_string(m_id_first_fork));
 }
 
@@ -102,6 +103,7 @@ void pn_phil_t::take_second_fork() {
     while (!perform_stage(m_id_second_fork, fork_action_t::take)) {
         this_thread::sleep_for(timeout_philosopher_if_denied_take);
     }
+    philog(m_name, "took #", m_id_second_fork);
 //    log(string() + "Phil #" + to_string(m_id_first_fork) + " took #" + to_string(m_id_second_fork));
 //    log(string() + "second fork");
 }
@@ -110,6 +112,7 @@ void pn_phil_t::put_first_fork(){
     while (!perform_stage(m_id_first_fork, fork_action_t::put)) {
         this_thread::sleep_for(timeout_philosopher_if_denied_put);
     }
+    philog(m_name, "put #", m_id_first_fork);
 //    log(string() + "put fork");
 //    log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_first_fork));
 }
@@ -118,6 +121,7 @@ void pn_phil_t::put_second_fork(){
     while (!perform_stage(m_id_second_fork, fork_action_t::put)) {
         this_thread::sleep_for(timeout_philosopher_if_denied_put);
     }
+    philog(m_name, "put #", m_id_second_fork);
 //    log(string() + "put fork");
 //    log(string() + "Phil #" + to_string(m_id_first_fork) + " put #" + to_string(m_id_second_fork));
 }
@@ -127,8 +131,8 @@ void pn_phil_t::put_second_fork(){
  * --------------------------------------------------------------------------- */
 
 void pn_phil_t::perform() {
-//    log(string() + "Phil #" + to_string(m_id_first_fork) + " here");
-    slog(m_name, "here");
+    philog(m_name, "here");
+
     while (true) {
         take_first_fork();
         take_second_fork();
